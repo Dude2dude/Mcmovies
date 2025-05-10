@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <title>My Movie Site</title>
+    <style>
+        /* Reset and base */
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #121212;
+            color: #eee;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+        }
+        /* Sidebar styles */
+        #sidebar {
+            background: #1f1f1f;
+            width: 200px;
+            max-width: 80vw;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            transform: translateX(0);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            padding: 0.8rem 1rem;
+            user-select: none;
+        }
+        #sidebar.hidden {
+            transform: translateX(-100%);
+        }
+        #sidebar h1 {
+            font-size: 1.5rem;
+            color: #ff3c3c;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+        }
+        #sidebar nav {
+            flex-grow: 1;
+        }
+        #sidebar nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 1.5rem 0;
+        }
+        #sidebar nav ul li {
+            margin-bottom: 1.2rem;
+        }
+        #sidebar nav ul li button,
+        #sidebar nav ul li a {
+            background: none;
+            border: none;
+            color: #eee;
+            font-size: 1rem;
+            padding: 0;
+            cursor: pointer;
+            user-select: none;
+            text-align: left;
+            width: 100%;
+            transition: color 0.2s ease;
+        }
+        #sidebar nav ul li button:hover,
+        #sidebar nav ul li a:hover,
+        #sidebar nav ul li button.selected,
+        #sidebar nav ul li a.selected {
+            color: #ff5c5c;
+            outline: none;
+        }
+        #sidebar .languages {
+            border-top: 1px solid #444;
+            padding-top: 0.8rem;
+        }
+        #sidebar .languages h2 {
+            font-size: 1rem;
+            margin-bottom: 0.8rem;
+            color: #ff6666;
+            font-weight: 600;
+        }
+        #sidebar .languages ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        #sidebar .languages ul li {
+            margin-bottom: 0.6rem;
+        }
+        #sidebar .languages ul li button {
+            font-size: 0.9rem;
+            color: #eee;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: color 0.2s ease;
+            width: 100%;
+            text-align: left;
+            padding: 0;
+        }
+        #sidebar .languages ul li button.selected {
+            color: #ff3c3c;
+            font-weight: 700;
+            outline: none;
+        }
+        /* Hamburger toggle button */
+        #toggle-btn {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 2000;
+            background: #ff3c3c;
+            border: none;
+            border-radius: 6px;
+            width: 36px;
+            height: 36px;
+            cursor: pointer;
+            box-shadow: 0 0 8px #ff3c3caa;
+        }
+        #toggle-btn:focus {
+            outline: none;
+            box-shadow: 0 0 12px #ff3c3cff;
+        }
+        #toggle-btn div {
+            width: 18px;
+            height: 2.5px;
+            background: #fff;
+            margin: 4.5px auto;
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+        /* Animate toggle button when active */
+        #toggle-btn.active div:nth-child(1) {
+            transform: translateY(6px) rotate(45deg);
+        }
+        #toggle-btn.active div:nth-child(2) {
+            opacity: 0;
+        }
+        #toggle-btn.active div:nth-child(3) {
+            transform: translateY(-6px) rotate(-45deg);
+        }
+        /* Main content area */
+        main {
+            flex: 1;
+            margin-left: 200px;
+            padding: 0.8rem 0.8rem 1.5rem;
+            max-width: 330px;
+            overflow-x: hidden;
+        }
+        main.fullwidth {
+            margin-left: 0;
+            max-width: 100%;
+        }
+        #search-container {
+            margin-bottom: 0.8rem;
+            text-align: center;
+        }
+        #search {
+            width: 100%;
+            max-width: 320px;
+            padding: 0.4rem 0.6rem;
+            border: none;
+            border-radius: 7px;
+            font-size: 0.9rem;
+            outline: none;
+            box-shadow: 0 0 4px #ff3c3c55;
+            background: #222;
+            color: #eee;
+            transition: box-shadow 0.3s ease;
+        }
+        #search:focus {
+            box-shadow: 0 0 8px #ff3c3c;
+        }
+        /* Section heading */
+        .section-header {
+            margin: 1rem 0 0.5rem 0.3rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #ff4c4c;
+            user-select: none;
+        }
+        /* Horizontal scroll container for movies/series */
+        .items-scroll-container {
+            display: flex;
+            gap: 0.8rem;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            padding-bottom: 0.4rem;
+        }
+        .items-scroll-container::-webkit-scrollbar {
+            height: 7px;
+        }
+        .items-scroll-container::-webkit-scrollbar-thumb {
+            background: #ff3c3c88;
+            border-radius: 4px;
+        }
+        .items-scroll-container::-webkit-scrollbar-track {
+            background: #222;
+        }
+        .movie-card, .series-card {
+            flex: 0 0 130px;
+            background: #222;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px #ff3c3c88;
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        .movie-card:hover, .series-card:hover {
+            transform: scale(1.07);
+            box-shadow: 0 5px 18px #ff3c3ccc;
+        }
+        .poster {
+            width: 100%;
+            display: block;
+            border-bottom: 1px solid #ff3c3c44;
+            height: 180px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+        .movie-info, .series-info {
+            padding: 0.6rem 0.6rem 0.3rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .movie-title, .series-title {
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin: 0 0 0.15rem;
+            color: #ff5c5c;
+        }
+        .movie-genre, .series-genre {
+            font-size: 0.65rem;
+            color: #bbb;
+            margin-bottom: 0.2rem;
+            font-style: italic;
+        }
+        .movie-description, .series-description {
+            font-size: 0.65rem;
+            line-height: 1.1;
+            color: #ccc;
+            flex-grow: 1;
+        }
+        .download-btn {
+            margin-top: auto;
+            background: #ff3c3c;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 0.3rem 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-align: center;
+            cursor: pointer;
+            text-decoration: none;
+            user-select: none;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+        }
+        .download-btn:hover,
+        .download-btn:focus {
+            background: #ff1a1a;
+            outline: none;
+            transform: scale(1.05);
+        }
+        .no-items-message {
+            color: #999;
+            text-align: center;
+            width: 100%;
+            user-select: none;
+        }  
+        #error-message {
+            color: #ff4c4c;
+            text-align: center;
+            padding: 1rem;
+            font-weight: 700;
+            user-select: none;
+        }
+        footer {
+            text-align: center;
+            font-size: 0.8rem;
+            padding: 0.4rem 1rem;
+            color: #555;
+            user-select: none;
+            margin-top: auto;
+        }
+        /* Responsive adjustments */
+        @media (max-width: 700px) {
+            #sidebar {
+                transform: translateX(-100%);
+                position: fixed;
+                z-index: 1000;
+                width: 70vw;
+                max-width: 250px;
+                padding: 1rem 1.5rem;
+            }
+            #sidebar.show {
+                transform: translateX(0);
+            }
+            main {
+                margin-left: 0;
+                max-width: 100%;
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            #toggle-btn {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button id="toggle-btn" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="sidebar" title="Toggle menu">
+        <div></div>
+        <div></div>
+        <div></div>
+    </button>
+    <aside id="sidebar" role="navigation" aria-label="Main navigation">
+        <h1>My Movie Site</h1>
+        <nav>
+            <ul>
+                <li><button type="button" id="nav-movies" class="selected" aria-current="page">Movies</button></li>
+                <li><button type="button" id="nav-series">Series</button></li>
+            </ul>
+        </nav>
+        <div class="languages" aria-label="Select language">
+            <h2>Language</h2>
+            <ul>
+                <li><button type="button" class="language-btn selected" data-lang="en">English</button></li>
+                <li><button type="button" class="language-btn" data-lang="es">Spanish</button></li>
+                <li><button type="button" class="language-btn" data-lang="fr">French</button></li>
+            </ul>
+        </div>
+    </aside>
+    <main>
+        <div id="search-container">
+            <input type="text" id="search" placeholder="Search movies..." aria-label="Search movies" />
+        </div>
+        <div id="error-message" role="alert" aria-live="assertive" style="display:none;"></div>
+        <!-- Movies sections container -->
+        <div id="movies-content" style="display:none;">
+            <section aria-label="New Releases">
+                <h2 class="section-header" data-key="newReleases">New Releases</h2>
+                <div class="items-scroll-container" id="new-releases-container" tabindex="0" aria-live="polite" aria-relevant="additions removals"></div>
+            </section>
+            <section aria-label="Mostly Watched">
+                <h2 class="section-header" data-key="mostlyWatched">Mostly Watched</h2>
+                <div class="items-scroll-container" id="mostly-watched-container" tabindex="0" aria-live="polite" aria-relevant="additions removals"></div>
+            </section>
+            <section aria-label="Classics">
+                <h2 class="section-header" data-key="classics">Classics</h2>
+                <div class="items-scroll-container" id="classics-container" tabindex="0" aria-live="polite" aria-relevant="additions removals"></div>
+            </section>
+        </div>
+        <!-- Series sections container (hidden by default) -->
+        <div id="series-content" style="display:none;">
+            <section aria-label="Popular Series">
+                <h2 class="section-header" data-key="popularSeries">Popular Series</h2>
+                <div class="items-scroll-container" id="popular-series-container" tabindex="0" aria-live="polite" aria-relevant="additions removals"></div>
+            </section>
+            <section aria-label="New Series">
+                <h2 class="section-header" data-key="newSeries">New Series</h2>
+                <div class="items-scroll-container" id="new-series-container" tabindex="0" aria-live="polite" aria-relevant="additions removals"></div>
+            </section>
+        </div>
+    </main>
+    <footer>
+        &copy; 2024 My Movie Site
+    </footer>
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const toggleBtn = document.getElementById('toggle-btn');
+        const navMoviesBtn = document.getElementById('nav-movies');
+        const navSeriesBtn = document.getElementById('nav-series');
+        const searchInput = document.getElementById('search');
+        const moviesContent = document.getElementById('movies-content');
+        const seriesContent = document.getElementById('series-content');
+        const languageButtons = document.querySelectorAll('.language-btn');
+        const sectionHeaders = document.querySelectorAll('.section-header');
+        const errorMessageEl = document.getElementById('error-message');
+
+        // Current state
+        let currentCategory = 'movies'; // or 'series'
+        let currentLanguage = 'en';
+
+        // Data stores loaded from JSON file
+        let moviesData = null;
+        let seriesData = null;
+
+        // Containers mapping (category to container id and data)
+        let containersMap = {
+            movies: [],
+            series: []
+        };
+
+        // Toggle sidebar visibility on small screens
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('show');
+            toggleBtn.classList.toggle('active');
+            const expanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+            toggleBtn.setAttribute('aria-expanded', String(!expanded));
+        });
+
+        // Close sidebar when clicking inside main (for small screens)
+        document.querySelector('main').addEventListener('click', () => {
+            if (sidebar.classList.contains('show')) {
+                sidebar.classList.remove('show');
+                toggleBtn.classList.remove('active');
+                toggleBtn.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        // Switch category handler
+        function switchCategory(category) {
+            if (currentCategory === category) return;
+            currentCategory = category;
+            if (category === 'movies') {
+                moviesContent.style.display = '';
+                seriesContent.style.display = 'none';
+                navMoviesBtn.classList.add('selected');
+                navMoviesBtn.setAttribute('aria-current', 'page');
+                navSeriesBtn.classList.remove('selected');
+                navSeriesBtn.removeAttribute('aria-current');
+            } else {
+                seriesContent.style.display = '';
+                moviesContent.style.display = 'none';
+                navSeriesBtn.classList.add('selected');
+                navSeriesBtn.setAttribute('aria-current', 'page');
+                navMoviesBtn.classList.remove('selected');
+                navMoviesBtn.removeAttribute('aria-current');
+            }
+            searchInput.value = '';
+            updateSearchPlaceholder();
+            renderAllSections();
+        }
+        navMoviesBtn.addEventListener('click', () => switchCategory('movies'));
+        navSeriesBtn.addEventListener('click', () => switchCategory('series'));
+
+        // Language switch handler
+        function setLanguage(lang) {
+            if (!translations[lang]) return;
+            currentLanguage = lang;
+            languageButtons.forEach(btn => {
+                btn.classList.toggle('selected', btn.dataset.lang === lang);
+            });
+            updateUIStrings();
+            renderAllSections();
+        }
+        languageButtons.forEach(btn => {
+            btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
+        });
+
+        // Language translation strings
+        const translations = {
+            en: {
+                searchPlaceholder: 'Search movies...',
+                navMovies: 'Movies',
+                navSeries: 'Series',
+                sections: {
+                    newReleases: 'New Releases',
+                    mostlyWatched: 'Mostly Watched',
+                    classics: 'Classics',
+                    popularSeries: 'Popular Series',
+                    newSeries: 'New Series'
+                },
+                downloadLabel: 'Download',
+                languageName: 'English',
+                noItemsMessage: 'No items found.'
+            },
+            es: {
+                searchPlaceholder: 'Buscar películas...',
+                navMovies: 'Películas',
+                navSeries: 'Series',
+                sections: {
+                    newReleases: 'Nuevos Lanzamientos',
+                    mostlyWatched: 'Más Vistos',
+                    classics: 'Clásicos',
+                    popularSeries: 'Series Populares',
+                    newSeries: 'Nuevas Series'
+                },
+                downloadLabel: 'Descargar',
+                languageName: 'Español',
+                noItemsMessage: 'No se encontraron resultados.'
+            },
+            fr: {
+                searchPlaceholder: 'Rechercher des films...',
+                navMovies: 'Films',
+                navSeries: 'Séries',
+                sections: {
+                    newReleases: 'Nouvelles Sorties',
+                    mostlyWatched: 'Les Plus Regardés',
+                    classics: 'Classiques',
+                    popularSeries: 'Séries Populaires',
+                    newSeries: 'Nouvelles Séries'
+                },
+                downloadLabel: 'Télécharger',
+                languageName: 'Français',
+                noItemsMessage: 'Aucun résultat trouvé.'
+            }
+        };
+
+        // Update all UI strings to match current language
+        function updateUIStrings() {
+            const t = translations[currentLanguage];
+            searchInput.placeholder = t.searchPlaceholder;
+            navMoviesBtn.textContent = t.navMovies;
+            navSeriesBtn.textContent = t.navSeries;
+            // Section headers
+            sectionHeaders.forEach(header => {
+                const key = header.dataset.key;
+                if (t.sections[key]) {
+                    header.textContent = t.sections[key];
+                }
+            });
+            // Update download button text labels on all displayed cards
+            document.querySelectorAll('.download-btn').forEach(btn => {
+                btn.textContent = t.downloadLabel;
+                const ariaLabel = btn.getAttribute('aria-label');
+                if (ariaLabel) {
+                    const itemTitle = ariaLabel.replace(/^(Download|Descargar|Télécharger)\s*/, '');
+                    btn.setAttribute('aria-label', `${t.downloadLabel} ${itemTitle}`);
+                }
+            });
+        }
+
+        // Helper function to render items (movies or series) for a container
+        function displayItems(items, container, isSeries = false) {
+            container.innerHTML = '';
+            if (items.length === 0) {
+                const noMsg = translations[currentLanguage]?.noItemsMessage || 'No items found.';
+                container.innerHTML = `<p class="no-items-message">${noMsg}</p>`;
+                return;
+            }
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = isSeries ? 'series-card' : 'movie-card';
+                card.tabIndex = 0;
+
+                card.innerHTML = `
+                    <img src="${item.poster}" alt="${isSeries ? 'Poster of series ' : 'Poster of movie '}${item.title}" class="poster" loading="lazy"/>
+                    <div class="${isSeries ? 'series-info' : 'movie-info'}">
+                        <h3 class="${isSeries ? 'series-title' : 'movie-title'}">${item.title}</h3>
+                        <div class="${isSeries ? 'series-genre' : 'movie-genre'}">${item.genre}</div>
+                        <p class="${isSeries ? 'series-description' : 'movie-description'}">${item.description}</p>
+                        <a href="${item.downloadUrl}" class="download-btn" download="${item.title.replace(/\s+/g, '_').toLowerCase()}.mp4" aria-label="${translations[currentLanguage].downloadLabel} ${item.title}">${translations[currentLanguage].downloadLabel}</a>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Filter items by search query
+        function filterItemsByQuery(itemsArray, query) {
+            if (!query) return itemsArray;
+            query = query.toLowerCase();
+            return itemsArray.filter(item =>
+                item.title.toLowerCase().includes(query) ||
+                item.genre.toLowerCase().includes(query) ||
+                item.description.toLowerCase().includes(query)
+            );
+        }
+
+        // Auto scroll logic for containers
+        function startAutoScrollForContainer(containerObj, scrollSpeed = 0.7) {
+            let direction = 1;
+            const el = containerObj.el;
+            if (containerObj.intervalId) clearInterval(containerObj.intervalId);
+            containerObj.intervalId = setInterval(() => {
+                el.scrollLeft += scrollSpeed * direction;
+                if (el.scrollLeft + el.clientWidth >= el.scrollWidth - 1) {
+                    direction = -1;
+                } else if (el.scrollLeft <= 0) {
+                    direction = 1;
+                }
+            }, 16);
+        }
+
+        function stopAutoScrollForContainer(containerObj) {
+            if (containerObj.intervalId) {
+                clearInterval(containerObj.intervalId);
+                containerObj.intervalId = null;
+            }
+        }
+
+        // Initialize auto scroll on visible containers
+        function initAutoScroll(containersList) {
+            containersList.forEach(containerObj => {
+                startAutoScrollForContainer(containerObj);
+                containerObj.el.addEventListener('mouseenter', () => stopAutoScrollForContainer(containerObj));
+                containerObj.el.addEventListener('mouseleave', () => startAutoScrollForContainer(containerObj));
+                containerObj.el.addEventListener('focusin', () => stopAutoScrollForContainer(containerObj));
+                containerObj.el.addEventListener('focusout', () => startAutoScrollForContainer(containerObj));
+            });
+        }
+
+        // Render all sections currently visible based on category and search query
+        function renderAllSections() {
+            if (!moviesData || !seriesData) {
+                return;
+            }
+            const query = searchInput.value.trim().toLowerCase();
+            if (currentCategory === 'movies') {
+                moviesContent.style.display = '';
+                seriesContent.style.display = 'none';
+                const containers = containersMap.movies;
+                containers.forEach(c => {
+                    const filtered = filterItemsByQuery(c.data, query);
+                    displayItems(filtered, c.el, false);
+                });
+                initAutoScroll(containers);
+            } else {
+                moviesContent.style.display = 'none';
+                seriesContent.style.display = '';
+                const containers = containersMap.series;
+                containers.forEach(c => {
+                    const filtered = filterItemsByQuery(c.data, query);
+                    displayItems(filtered, c.el, true);
+                });
+                initAutoScroll(containers);
+            }
+        }
+
+        // Update search input placeholder text for current category and language
+        function updateSearchPlaceholder() {
+            const basePlaceholder = translations[currentLanguage].searchPlaceholder;
+            searchInput.placeholder = currentCategory === 'movies' 
+                ? basePlaceholder.replace('movies', translations[currentLanguage].navMovies.toLowerCase())
+                : basePlaceholder.replace('movies', translations[currentLanguage].navSeries.toLowerCase());
+        }
+
+        // Load data JSON file and initialize site
+        async function loadDataAndInit() {
+            try {
+                const response = await fetch('movies-data.json', {cache: "no-store"});
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const data = await response.json();
+                moviesData = data.movies;
+                seriesData = data.series;
+
+                // Update containersMap with loaded data arrays and container elements
+                containersMap = {
+                    movies: [
+                        { key: 'newReleases', el: document.getElementById('new-releases-container'), data: moviesData.newReleases || [] },
+                        { key: 'mostlyWatched', el: document.getElementById('mostly-watched-container'), data: moviesData.mostlyWatched || [] },
+                        { key: 'classics', el: document.getElementById('classics-container'), data: moviesData.classics || [] }
+                    ],
+                    series: [
+                        { key: 'popularSeries', el: document.getElementById('popular-series-container'), data: seriesData.popularSeries || [] },
+                        { key: 'newSeries', el: document.getElementById('new-series-container'), data: seriesData.newSeries || [] }
+                    ]
+                };
+
+                errorMessageEl.style.display = 'none';
+                moviesContent.style.display = 'block';
+
+                updateUIStrings();
+                updateSearchPlaceholder();
+                renderAllSections();
+            } catch (error) {
+                console.error('Error loading movie data JSON:', error);
+                errorMessageEl.textContent = 'Failed to load movie data. Please try again later.';
+                errorMessageEl.style.display = 'block';
+            }
+        }
+
+        searchInput.addEventListener('input', renderAllSections);
+
+        // Initialize everything on page load
+        loadDataAndInit();
+
+    </script>
+</body>
+</html>
+
