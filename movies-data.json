@@ -1,0 +1,122 @@
+{
+  "movies": {
+    "newReleases": [
+      {
+        "title": "Dune",
+        "genre": "Sci-Fi, Adventure",
+        "description": "Feature adaptation of Frank Herbert's science fiction novel about a noble family's son protecting the galaxy's most valuable asset.",
+        "poster": "https://m.media-amazon.com/images/I/81vXcQjR2GL._AC_SY679_.jpg",
+        "downloadUrl": "https://example.com/downloads/dune.mp4"
+      },
+      {
+        "title": "No Time to Die",
+        "genre": "Action, Thriller",
+        "description": "James Bond has left active service. His peace is short-lived when an old friend asks for help.",
+        "poster": "https://m.media-amazon.com/images/I/71so8eDTuIL._AC_SY679_.jpg",
+        "downloadUrl": "https://example.com/downloads/no-time-to-die.mp4"
+      },
+      {
+        "title": "The Batman",
+        "genre": "Action, Crime, Drama",
+        "description": "Batman ventures into Gotham City's underworld when a sadistic killer leaves cryptic clues.",
+        "poster": "https://m.media-amazon.com/images/I/41ZsWMTk4kL._AC_SY445_.jpg",
+        "downloadUrl": "https://example.com/downloads/the-batman.mp4"
+      }
+    ],
+    "mostlyWatched": [
+      {
+        "title": "The Shawshank Redemption",
+        "genre": "Drama",
+        "description": "Two imprisoned men bond over years, finding solace and redemption through acts of decency.",
+        "poster": "https://m.media-amazon.com/images/I/51NiGlapXlL._AC_.jpg",
+        "downloadUrl": "https://example.com/downloads/shawshank-redemption.mp4"
+      },
+      {
+        "title": "Inception",
+        "genre": "Sci-Fi, Thriller",
+        "description": "A thief steals corporate secrets through dream-sharing technology and must plant an idea into a CEO's mind.",
+        "poster": "https://m.media-amazon.com/images/I/5101ElhQpsL._AC_.jpg",
+        "downloadUrl": "https://example.com/downloads/inception.mp4"
+      },
+      {
+        "title": "The Dark Knight",
+        "genre": "Action, Crime, Drama",
+        "description": "Batman faces the Joker, a menace who tests his ability to fight injustice.",
+        "poster": "https://m.media-amazon.com/images/I/51k0qa3T6vL._AC_.jpg",
+        "downloadUrl": "https://example.com/downloads/the-dark-knight.mp4"
+      }
+    ],
+    "classics": [
+      {
+        "title": "Forrest Gump",
+        "genre": "Drama, Romance",
+        "description": "Historic events unfold through the perspective of a man with an IQ of 75.",
+        "poster": "https://m.media-amazon.com/images/I/41+eK8zBwQL._AC_.jpg",
+        "downloadUrl": "https://example.com/downloads/forrest-gump.mp4"
+      },
+      {
+        "title": "Interstellar",
+        "genre": "Adventure, Drama, Sci-Fi",
+        "description": "Explorers travel through a wormhole in space to ensure humanity's survival.",
+        "poster": "https://m.media-amazon.com/images/I/91kFYg4fX3L._AC_SL1500_.jpg",
+        "downloadUrl": "https://example.com/downloads/interstellar.mp4"
+      },
+      {
+        "title": "Parasite",
+        "genre": "Comedy, Drama, Thriller",
+        "description": "Greed and class discrimination threaten a symbiotic relationship between two families.",
+        "poster": "https://m.media-amazon.com/images/I/81p+xe8cbnL._AC_SY679_.jpg",
+        "downloadUrl": "https://example.com/downloads/parasite.mp4"
+      }
+    ]
+  },
+  "series": {
+    "popularSeries": [
+      {
+        "title": "Stranger Things",
+        "genre": "Drama, Fantasy, Horror",
+        "description": "Kids in 1980s Indiana confront supernatural forces and secret government experiments.",
+        "poster": "https://m.media-amazon.com/images/I/81Zlqrdv50L._AC_SY679_.jpg",
+        "downloadUrl": "https://example.com/downloads/stranger-things.mp4"
+      },
+      {
+        "title": "Breaking Bad",
+        "genre": "Crime, Drama, Thriller",
+        "description": "A high school chemistry teacher turned methamphetamine producer navigates dangers and moral challenges.",
+        "poster": "https://m.media-amazon.com/images/I/51Jo0n1cWgL._AC_.jpg",
+        "downloadUrl": "https://example.com/downloads/breaking-bad.mp4"
+      },
+      {
+        "title": "Game of Thrones",
+        "genre": "Action, Adventure, Drama",
+        "description": "Noble families vie for the Iron Throne as ancient forces awaken across Westeros.",
+        "poster": "https://m.media-amazon.com/images/I/51rggtPgmRL._AC_.jpg",
+        "downloadUrl": "https://example.com/downloads/game-of-thrones.mp4"
+      }
+    ],
+    "newSeries": [
+      {
+        "title": "The Witcher",
+        "genre": "Action, Adventure, Drama",
+        "description": "A mutated monster hunter struggles to find his place in a world where people often prove more wicked than beasts.",
+        "poster": "https://m.media-amazon.com/images/I/81CdC+B8pDL._AC_SY679_.jpg",
+        "downloadUrl": "https://example.com/downloads/the-witcher.mp4"
+      },
+      {
+        "title": "Loki",
+        "genre": "Action, Adventure, Fantasy",
+        "description": "The mercurial God of Mischief confronts his past and future after stealing the Tesseract.",
+        "poster": "https://m.media-amazon.com/images/I/71wF72Vgj7L._AC_SY679_.jpg",
+        "downloadUrl": "https://example.com/downloads/loki.mp4"
+      },
+      {
+        "title": "Squid Game",
+        "genre": "Action, Drama, Thriller",
+        "description": "Hundreds of players risk their lives playing children's games for a tempting prize.",
+        "poster": "https://m.media-amazon.com/images/I/71fx2glcwpL._AC_SY679_.jpg",
+        "downloadUrl": "https://example.com/downloads/squid-game.mp4"
+      }
+    ]
+  }
+}
+
