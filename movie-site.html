@@ -345,59 +345,59 @@
       <li>button type="button" class="language-btn" data-lang="es">Spanish/button>/li>
       <li>button type="button" class="language-btn" data-lang="fr">French/button>/li>
     </ul>
-  /div>
-/aside>
-main>
-  div id="search-container">
-    input type="text" id="search" placeholder="Search movies..." aria-label="Search movies" />
-  /div>
-  div id="error-message" role="alert" aria-live="assertive" style="display:none;">/div>
+  </div>
+</aside>
+<main>
+  <div id="search-container">
+    <input type="text" id="search" placeholder="Search movies..." aria-label="Search movies" />
+  </div>
+  <div id="error-message" role="alert" aria-live="assertive" style="display:none;">/div>
 
   !-- Movies sections container -->
-  div id="movies-content" style="display:none;">
-    section aria-label="New Releases">
-      h2 class="section-header" data-key="newReleases">New Releases/h2>
-      div class="items-scroll-container" id="new-releases-container" tabindex="0" aria-live="polite" aria-relevant="additions removals">
+  <div id="movies-content" style="display:none;">
+    <section aria-label="New Releases">
+      <h2 class="section-header" data-key="newReleases">New Releases/h2>
+      <div class="items-scroll-container" id="new-releases-container" tabindex="0" aria-live="polite" aria-relevant="additions removals">
         !-- New Releases movies inserted here -->
-      /div>
-    /section>
+      </div>
+    </section>
 
-    section aria-label="Mostly Watched">
-      h2 class="section-header" data-key="mostlyWatched">Mostly Watched/h2>
-      div class="items-scroll-container" id="mostly-watched-container" tabindex="0" aria-live="polite" aria-relevant="additions removals">
+    <section aria-label="Mostly Watched">
+      <h2 class="section-header" data-key="mostlyWatched">Mostly Watched/h2>
+      <div class="items-scroll-container" id="mostly-watched-container" tabindex="0" aria-live="polite" aria-relevant="additions removals">
         !-- Mostly Watched movies inserted here -->
-      /div>
-    /section>
+      </div>
+    </section>
 
-    section aria-label="Classics">
-      h2 class="section-header" data-key="classics">Classics/h2>
-      div class="items-scroll-container" id="classics-container" tabindex="0" aria-live="polite" aria-relevant="additions removals">
+    <section aria-label="Classics">
+      <h2 class="section-header" data-key="classics">Classics/h2>
+      <div class="items-scroll-container" id="classics-container" tabindex="0" aria-live="polite" aria-relevant="additions removals">
         !-- Classics movies inserted here -->
-      /div>
-    /section>
-  /div>
+      </div>
+    </section>
+  </div>
 
   !-- Series sections container (hidden by default) -->
-  div id="series-content" style="display:none;">
-    section aria-label="Popular Series">
-      h2 class="section-header" data-key="popularSeries">Popular Series/h2>
-      div class="items-scroll-container" id="popular-series-container" tabindex="0" aria-live="polite" aria-relevant="additions removals">
+  <div id="series-content" style="display:none;">
+    <section aria-label="Popular Series">
+      <h2 class="section-header" data-key="popularSeries">Popular Series/h2>
+      <div class="items-scroll-container" id="popular-series-container" tabindex="0" aria-live="polite" aria-relevant="additions removals">
         !-- Popular Series inserted here -->
-      /div>
-    /section>
+      </div>
+    </section>
 
-    section aria-label="New Series">
-      h2 class="section-header" data-key="newSeries">New Series/h2>
-      div class="items-scroll-container" id="new-series-container" tabindex="0" aria-live="polite" aria-relevant="additions removals">
+    <section aria-label="New Series">
+      <h2 class="section-header" data-key="newSeries">New Series/h2>
+      <div class="items-scroll-container" id="new-series-container" tabindex="0" aria-live="polite" aria-relevant="additions removals">
         !-- New Series inserted here -->
-      /div>
-    /section>
-  /div>
-/main>
-footer>
+      </div>
+    </section>
+  </div>
+</main>
+<footer>
   &copy; 2024 My Movie Site
-/footer>
-script>
+</footer>
+<script>
   const sidebar = document.getElementById('sidebar');
   const toggleBtn = document.getElementById('toggle-btn');
   const navMoviesBtn = document.getElementById('nav-movies');
@@ -707,6 +707,6 @@ script>
 
   // Call load data and initialize on page load
   loadDataAndInit();
-/script>
-/body>
-/html>
+</script>
+</body>
+</html>
