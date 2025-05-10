@@ -559,7 +559,7 @@
 </head>
 <body>
   <header>
-    <h1> M C company <center> movies experts </center></h1>
+    <h1> M C company</h1>
   </header>
 
   <button id="toggle-btn" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="sidebar" title="Toggle menu">
@@ -591,7 +591,7 @@
 
   <div class="app-container">
     <main>
-      <div id="search-container" style="display:none;">
+      <div id="search-container">
         <input type="text" id="search" placeholder="Search movies..." aria-label="Search movies" autocomplete="off" />
       </div>
       <div id="error-message" role="alert" aria-live="assertive" style="display:none;"></div>
@@ -710,7 +710,6 @@
       languageButtons.forEach(btn => {
         btn.classList.toggle('selected', btn.dataset.lang === lang);
       });
-      // No translation update needed for the language buttons text themselves here, only the interface strings.
       if(currentDetailItem) {
         renderDetail(currentDetailItem, currentDetailIsSeries);
       }
@@ -720,7 +719,23 @@
       btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
     });
 
-    // Keep translations as before, can be extended if needed but not mandatory for languages filter
+    const translations = {
+      en: {
+        navMovies: "Movies",
+        navSeries: "Series",
+        searchPlaceholder: "Search movies...",
+        downloadLabel: "Download",
+        backButton: "Back",
+        noItemsMessage: "No items found.",
+        sections: {
+          newReleases: "New Releases",
+          mostlyWatched: "Mostly Watched",
+          classics: "Classics",
+          popularSeries: "Popular Series",
+          newSeries: "New Series"
+        }
+      }
+    };
 
     function updateUIStrings() {
       let t = translations[currentLanguage] || translations.en;
@@ -784,18 +799,14 @@
       );
     }
 
-    // New function: filter items by language if in movies category
     function filterItemsByLanguage(itemsArray, language) {
       if (!language || language === 'all') return itemsArray;
       return itemsArray.filter(item => {
-        // Normalize language info in item - we expect lower case comparison
-        // Assuming movie items have a 'language' field with language name lowercase or mixed case
         if (!item.language) return false;
         return item.language.toLowerCase() === language.toLowerCase();
       });
     }
 
-    // Auto scroll only for New Releases container
     function startAutoScroll(containerEl) {
       if (!containerEl) return;
       let direction = 1;
@@ -812,11 +823,6 @@
       containerEl.addEventListener('focusout', () => startAutoScroll(containerEl));
     }
 
-    let containers = {
-      movies: [],
-      series: []
-    };
-
     let currentDetailItem = null;
     let currentDetailIsSeries = false;
 
@@ -829,7 +835,6 @@
       detailView.style.display = 'block';
       renderDetail(item, isSeries);
       detailView.focus();
-      // Stop auto-scroll for new releases to avoid distraction
       clearInterval(document.getElementById('new-releases-container')._scrollInterval);
     }
 
@@ -839,7 +844,6 @@
       detailView.style.display = 'none';
       listView.style.display = '';
       searchContainer.style.display = '';
-      // Resume scroll on new releases
       startAutoScroll(document.getElementById('new-releases-container'));
     }
 
@@ -881,7 +885,6 @@
         const conts = containersMap.series;
         conts.forEach(c => {
           let filtered = filterItemsByQuery(c.data, query);
-          // Do not filter series by language as per requirements
           displayItems(filtered, c.el, true);
           clearInterval(c.el._scrollInterval);
         });
@@ -897,8 +900,9 @@
 
     async function loadDataAndInit() {
       try {
-        const response = await fetch('movies-data.json', {cache:"no-store"});
-        if(!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+        // Make sure to serve movies-data.json from the same directory or correct path
+        const response = await fetch('movies-data.json', { cache: "no-store" });
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
         const data = await response.json();
         moviesData = data.movies;
         seriesData = data.series;
@@ -919,7 +923,7 @@
         updateUIStrings();
         updateSearchPlaceholder();
         renderAllSections();
-      } catch(error) {
+      } catch (error) {
         console.error('Failed to load movie data JSON:', error);
         errorMessageEl.textContent = 'Failed to load movie data. Please try again later.';
         errorMessageEl.style.display = 'block';
@@ -928,7 +932,6 @@
 
     searchInput.addEventListener('input', renderAllSections);
 
-    // Initialize by loading data
     loadDataAndInit();
   </script>
 </body>
