@@ -20,7 +20,6 @@
       flex-direction: column;
       height: 100vh;
     }
-    /* Container for sidebar and content */
     .app-container {
       flex: 1;
       display: flex;
@@ -66,8 +65,7 @@
     #sidebar nav ul li {
       margin-bottom: 1.4rem;
     }
-    #sidebar nav ul li button,
-    #sidebar nav ul li a {
+    #sidebar nav ul li button {
       background: none;
       border: none;
       color: #eee;
@@ -81,9 +79,7 @@
       font-weight: 600;
     }
     #sidebar nav ul li button:hover,
-    #sidebar nav ul li a:hover,
-    #sidebar nav ul li button.selected,
-    #sidebar nav ul li a.selected {
+    #sidebar nav ul li button.selected {
       color: #ff5c5c;
       outline: none;
     }
@@ -226,6 +222,10 @@
     }
     .items-scroll-container::-webkit-scrollbar-track {
       background: #222;
+    }
+    /* No scroll class disables auto scroll */
+    .no-scroll {
+      scroll-behavior: auto !important;
     }
     .movie-card, .series-card {
       flex: 0 0 180px;
@@ -535,13 +535,12 @@
   <div class="app-container">
     <main>
       <div id="search-container" style="display:none;">
-        <input type="text" id="search" placeholder="Search movies..." aria-label="Search movies" />
+        <input type="text" id="search" placeholder="Search movies..." aria-label="Search movies" autocomplete="off" />
       </div>
       <div id="error-message" role="alert" aria-live="assertive" style="display:none;"></div>
 
-      <!-- List view containers -->
+      <!-- List view -->
       <div id="list-view">
-        <!-- Movies List -->
         <div id="movies-content" style="display:none;">
           <section aria-label="New Releases">
             <h2 class="section-header" data-key="newReleases">New Releases</h2>
@@ -556,7 +555,6 @@
             <div class="items-scroll-container no-scroll" id="classics-container" tabindex="0" aria-live="polite" aria-relevant="additions removals"></div>
           </section>
         </div>
-        <!-- Series List -->
         <div id="series-content" style="display:none;">
           <section aria-label="Popular Series">
             <h2 class="section-header" data-key="popularSeries">Popular Series</h2>
@@ -569,10 +567,8 @@
         </div>
       </div>
 
-      <!-- Detail view container -->
-      <div id="detail-view" style="display:none;" tabindex="0" aria-live="polite" aria-label="Movie or series details">
-        <!-- Filled dynamically -->
-      </div>
+      <!-- Detail view -->
+      <div id="detail-view" style="display:none;" tabindex="0" aria-live="polite" aria-label="Movie or series details"></div>
     </main>
   </div>
   <footer>
@@ -593,24 +589,21 @@
     const listView = document.getElementById('list-view');
     const searchContainer = document.getElementById('search-container');
 
-    let currentCategory = 'movies'; // movies or series
+    let currentCategory = 'movies';
     let currentLanguage = 'en';
 
     let moviesData = null;
     let seriesData = null;
 
-    let containersMap = {
-      movies: [],
-      series: []
-    };
+    let containersMap = { movies: [], series: [] };
 
-    // Manage sidebar toggle
     toggleBtn.addEventListener('click', () => {
       sidebar.classList.toggle('show');
       toggleBtn.classList.toggle('active');
-      const expanded = toggleBtn.getAttribute('aria-expanded') === 'true';
-      toggleBtn.setAttribute('aria-expanded', String(!expanded));
+      let expanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+      toggleBtn.setAttribute('aria-expanded', !expanded);
     });
+
     document.querySelector('main').addEventListener('click', () => {
       if (sidebar.classList.contains('show')) {
         sidebar.classList.remove('show');
@@ -619,7 +612,6 @@
       }
     });
 
-    // Switch category handler
     function switchCategory(cat) {
       if (currentCategory === cat) return;
       currentCategory = cat;
@@ -639,15 +631,14 @@
         navMoviesBtn.classList.remove('selected');
         navMoviesBtn.removeAttribute('aria-current');
       }
+      searchContainer.style.display = '';
       searchInput.value = '';
       updateSearchPlaceholder();
       renderAllSections();
     }
-
     navMoviesBtn.addEventListener('click', () => switchCategory('movies'));
     navSeriesBtn.addEventListener('click', () => switchCategory('series'));
 
-    // Language switch handler
     function setLanguage(lang) {
       if (!translations[lang]) return;
       currentLanguage = lang;
@@ -655,10 +646,10 @@
         btn.classList.toggle('selected', btn.dataset.lang === lang);
       });
       updateUIStrings();
-      renderAllSections();
-      if (currentDetailItem) {
+      if(currentDetailItem) {
         renderDetail(currentDetailItem, currentDetailIsSeries);
       }
+      renderAllSections();
     }
     languageButtons.forEach(btn => {
       btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
@@ -722,9 +713,7 @@
       navSeriesBtn.textContent = t.navSeries;
       sectionHeaders.forEach(header => {
         const key = header.dataset.key;
-        if (t.sections[key]) {
-          header.textContent = t.sections[key];
-        }
+        if (t.sections[key]) header.textContent = t.sections[key];
       });
       document.querySelectorAll('.download-btn').forEach(btn => {
         btn.textContent = t.downloadLabel;
@@ -735,8 +724,7 @@
         }
       });
     }
-    
-    // Render listing items, attach click handlers for detail view
+
     function displayItems(items, container, isSeries = false) {
       container.innerHTML = '';
       if (!items.length) {
@@ -756,10 +744,9 @@
             <p class="${isSeries ? 'series-description' : 'movie-description'}">${item.description}</p>
           </div>
         `;
-        // Clicking card opens detail view
-        card.addEventListener('click', () => {
+        card.onclick = () => {
           showDetailView(item, isSeries);
-        });
+        };
         container.appendChild(card);
       });
     }
@@ -778,17 +765,12 @@
     function startAutoScroll(containerEl) {
       if (!containerEl) return;
       let direction = 1;
-      let scrollSpeed = 0.8;
-      if (containerEl._scrollInterval) {
-        clearInterval(containerEl._scrollInterval);
-      }
+      let scrollSpeed = 0.75;
+      if (containerEl._scrollInterval) clearInterval(containerEl._scrollInterval);
       containerEl._scrollInterval = setInterval(() => {
         containerEl.scrollLeft += scrollSpeed * direction;
-        if (containerEl.scrollLeft + containerEl.clientWidth >= containerEl.scrollWidth - 1) {
-          direction = -1;
-        } else if (containerEl.scrollLeft <= 0) {
-          direction = 1;
-        }
+        if (containerEl.scrollLeft + containerEl.clientWidth >= containerEl.scrollWidth - 1) direction = -1;
+        else if (containerEl.scrollLeft <= 0) direction = 1;
       }, 16);
       containerEl.addEventListener('mouseenter', () => clearInterval(containerEl._scrollInterval));
       containerEl.addEventListener('mouseleave', () => startAutoScroll(containerEl));
@@ -796,13 +778,11 @@
       containerEl.addEventListener('focusout', () => startAutoScroll(containerEl));
     }
 
-    // Containers for data and elements
-    let containersMap = {
+    let containers = {
       movies: [],
       series: []
     };
 
-    // Show detail view of an item and hide all others
     let currentDetailItem = null;
     let currentDetailIsSeries = false;
 
@@ -815,8 +795,8 @@
       detailView.style.display = 'block';
       renderDetail(item, isSeries);
       detailView.focus();
-      // Stop all auto-scroll intervals while detail is shown
-      containersMap.movies.forEach(c => {clearInterval(c.el._scrollInterval)});
+      // Stop auto-scroll for new releases to avoid distraction
+      clearInterval(document.getElementById('new-releases-container')._scrollInterval);
     }
 
     function hideDetailView() {
@@ -825,8 +805,7 @@
       detailView.style.display = 'none';
       listView.style.display = '';
       searchContainer.style.display = '';
-      errorMessageEl.style.display = 'none';
-      // Resume auto scroll on new releases
+      // Resume scroll on new releases
       startAutoScroll(document.getElementById('new-releases-container'));
     }
 
@@ -845,16 +824,15 @@
       });
     }
 
-    // Render all sections visible based on category and search query
     function renderAllSections() {
       if (!moviesData || !seriesData) return;
       const query = searchInput.value.trim().toLowerCase();
       if (currentCategory === 'movies') {
         moviesContent.style.display = '';
         seriesContent.style.display = 'none';
-        const containers = containersMap.movies;
-        containers.forEach(c => {
-          const filtered = filterItemsByQuery(c.data, query);
+        const conts = containersMap.movies;
+        conts.forEach(c => {
+          let filtered = filterItemsByQuery(c.data, query);
           displayItems(filtered, c.el, false);
           if (c.key === 'newReleases') {
             startAutoScroll(c.el);
@@ -865,16 +843,15 @@
       } else {
         moviesContent.style.display = 'none';
         seriesContent.style.display = '';
-        const containers = containersMap.series;
-        containers.forEach(c => {
-          const filtered = filterItemsByQuery(c.data, query);
+        const conts = containersMap.series;
+        conts.forEach(c => {
+          let filtered = filterItemsByQuery(c.data, query);
           displayItems(filtered, c.el, true);
           clearInterval(c.el._scrollInterval);
         });
       }
     }
 
-    // Update search input placeholder
     function updateSearchPlaceholder() {
       const basePlaceholder = translations[currentLanguage].searchPlaceholder;
       searchInput.placeholder = currentCategory === 'movies'
@@ -882,11 +859,10 @@
         : basePlaceholder.replace('movies', translations[currentLanguage].navSeries.toLowerCase());
     }
 
-    // Fetch data and initialize
     async function loadDataAndInit() {
       try {
-        const response = await fetch('movies-data.json', {cache: "no-store"});
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+        const response = await fetch('movies-data.json',{cache:"no-store"});
+        if(!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
         const data = await response.json();
         moviesData = data.movies;
         seriesData = data.series;
@@ -907,7 +883,7 @@
         updateUIStrings();
         updateSearchPlaceholder();
         renderAllSections();
-      } catch (error) {
+      } catch(error) {
         console.error('Failed to load movie data JSON:', error);
         errorMessageEl.textContent = 'Failed to load movie data. Please try again later.';
         errorMessageEl.style.display = 'block';
@@ -920,4 +896,3 @@
   </script>
 </body>
 </html>
-
