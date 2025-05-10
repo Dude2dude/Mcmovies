@@ -20,26 +20,12 @@
       flex-direction: column;
       height: 100vh;
     }
-    /* Header */
-    header {
-      background: #1f1f1f;
-      color: #ff3c3c;
-      font-weight: 900;
-      font-size: 2rem;
-      letter-spacing: 2px;
-      padding: 0.75rem 1.5rem;
-      user-select: none;
-      text-align: center;
-      flex-shrink: 0;
-      box-shadow: 0 3px 6px #0008;
-    }
-    /* Container for sidebar and content */
     .app-container {
       flex: 1;
       display: flex;
       overflow: hidden;
       height: 100%;
-      max-height: calc(100vh - 58px);
+      max-height: 100vh;
     }
     /* Sidebar styles */
     #sidebar {
@@ -48,7 +34,7 @@
       max-width: 80vw;
       height: 100vh;
       position: fixed;
-      top: 58px;
+      top: 0;
       left: 0;
       z-index: 1000;
       transform: translateX(0);
@@ -57,7 +43,6 @@
       flex-direction: column;
       padding: 1rem 1.2rem;
       user-select: none;
-      box-shadow: 2px 0 8px #000a;
     }
     #sidebar.hidden {
       transform: translateX(-100%);
@@ -65,11 +50,9 @@
     #sidebar h1 {
       font-size: 1.8rem;
       color: #ff3c3c;
-      margin-bottom: 1rem;
+      margin-bottom: 2rem;
       font-weight: 700;
       letter-spacing: 1.5px;
-      user-select: none;
-      text-align: center;
     }
     #sidebar nav {
       flex-grow: 1;
@@ -135,36 +118,12 @@
       font-weight: 900;
       outline: none;
     }
-    /* Close button for sidebar */
-    #sidebar-close-btn {
-      align-self: flex-end;
-      background: transparent;
-      border: none;
-      font-size: 1.6rem;
-      font-weight: 900;
-      color: #ff3c3c;
-      cursor: pointer;
-      margin-bottom: 0.5rem;
-      user-select: none;
-      padding: 0;
-      width: 30px;
-      height: 30px;
-      line-height: 30px;
-      text-align: center;
-      border-radius: 6px;
-      transition: background-color 0.25s;
-    }
-    #sidebar-close-btn:hover,
-    #sidebar-close-btn:focus {
-      background-color: #ff3c3c22;
-      outline: none;
-    }
     /* Hamburger toggle button */
     #toggle-btn {
       display: none;
       position: fixed;
-      top: 12px;
-      left: 12px;
+      top: 1rem;
+      left: 1rem;
       z-index: 2000;
       background: #ff3c3c;
       border: none;
@@ -203,7 +162,7 @@
       padding: 1rem 1rem 2rem;
       overflow-y: auto;
       overflow-x: hidden;
-      max-height: calc(100vh - 58px);
+      max-height: 100vh;
       display: flex;
       flex-direction: column;
     }
@@ -214,7 +173,6 @@
     #search-container {
       margin-bottom: 1.2rem;
       text-align: center;
-      display: none;
     }
     #search {
       width: 100%;
@@ -265,7 +223,7 @@
     .items-scroll-container::-webkit-scrollbar-track {
       background: #222;
     }
-    /* No scroll disables auto scroll */
+    /* No scroll class disables auto scroll */
     .no-scroll {
       scroll-behavior: auto !important;
     }
@@ -386,7 +344,6 @@
       padding: 20px 24px;
       color: #eee;
       user-select: text;
-      outline: none;
     }
     #detail-view .detail-poster {
       width: 100%;
@@ -499,9 +456,9 @@
       }
       #sidebar {
         position: fixed;
-        top: 58px;
+        top: 0;
         left: 0;
-        height: calc(100vh - 58px);
+        height: 100vh;
         width: 250px;
         max-width: 80vw;
         transform: translateX(-100%);
@@ -516,7 +473,7 @@
         margin-left: 0;
         max-width: 100vw;
         padding: 0.8rem 1rem 1.5rem;
-        height: calc(100vh - 58px);
+        height: 100vh;
         overflow-y: auto;
       }
       #toggle-btn {
@@ -553,14 +510,12 @@
   </style>
 </head>
 <body>
-  <header>My Movie Site</header>
   <button id="toggle-btn" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="sidebar" title="Toggle menu">
     <div></div>
     <div></div>
     <div></div>
   </button>
-  <aside id="sidebar" role="navigation" aria-label="Main navigation" tabindex="0">
-    <button id="sidebar-close-btn" aria-label="Close navigation menu">&times;</button>
+  <aside id="sidebar" role="navigation" aria-label="Main navigation">
     <h1>My Movie Site</h1>
     <nav>
       <ul>
@@ -584,6 +539,7 @@
       </div>
       <div id="error-message" role="alert" aria-live="assertive" style="display:none;"></div>
 
+      <!-- List view -->
       <div id="list-view">
         <div id="movies-content" style="display:none;">
           <section aria-label="New Releases">
@@ -611,6 +567,7 @@
         </div>
       </div>
 
+      <!-- Detail view -->
       <div id="detail-view" style="display:none;" tabindex="0" aria-live="polite" aria-label="Movie or series details"></div>
     </main>
   </div>
@@ -618,48 +575,40 @@
     &copy; 2024 My Movie Site
   </footer>
   <script>
-    const sidebar = document.getElementById("sidebar");
-    const toggleBtn = document.getElementById("toggle-btn");
-    const closeBtn = document.getElementById("sidebar-close-btn");
-    const navMoviesBtn = document.getElementById("nav-movies");
-    const navSeriesBtn = document.getElementById("nav-series");
-    const searchInput = document.getElementById("search");
-    const moviesContent = document.getElementById("movies-content");
-    const seriesContent = document.getElementById("series-content");
-    const languageButtons = document.querySelectorAll(".language-btn");
-    const sectionHeaders = document.querySelectorAll(".section-header");
-    const errorMessageEl = document.getElementById("error-message");
-    const detailView = document.getElementById("detail-view");
-    const listView = document.getElementById("list-view");
-    const searchContainer = document.getElementById("search-container");
+    const sidebar = document.getElementById('sidebar');
+    const toggleBtn = document.getElementById('toggle-btn');
+    const navMoviesBtn = document.getElementById('nav-movies');
+    const navSeriesBtn = document.getElementById('nav-series');
+    const searchInput = document.getElementById('search');
+    const moviesContent = document.getElementById('movies-content');
+    const seriesContent = document.getElementById('series-content');
+    const languageButtons = document.querySelectorAll('.language-btn');
+    const sectionHeaders = document.querySelectorAll('.section-header');
+    const errorMessageEl = document.getElementById('error-message');
+    const detailView = document.getElementById('detail-view');
+    const listView = document.getElementById('list-view');
+    const searchContainer = document.getElementById('search-container');
 
-    let currentCategory = "movies";
-    let currentLanguage = "en";
+    let currentCategory = 'movies';
+    let currentLanguage = 'en';
 
     let moviesData = null;
     let seriesData = null;
 
     let containersMap = { movies: [], series: [] };
 
-    toggleBtn.addEventListener("click", () => {
-      sidebar.classList.add("show");
-      toggleBtn.classList.add("active");
-      toggleBtn.setAttribute("aria-expanded", "true");
-      sidebar.focus();
+    toggleBtn.addEventListener('click', () => {
+      sidebar.classList.toggle('show');
+      toggleBtn.classList.toggle('active');
+      let expanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+      toggleBtn.setAttribute('aria-expanded', !expanded);
     });
 
-    closeBtn.addEventListener("click", () => {
-      sidebar.classList.remove("show");
-      toggleBtn.classList.remove("active");
-      toggleBtn.setAttribute("aria-expanded", "false");
-      toggleBtn.focus();
-    });
-
-    document.querySelector("main").addEventListener("click", () => {
-      if (sidebar.classList.contains("show")) {
-        sidebar.classList.remove("show");
-        toggleBtn.classList.remove("active");
-        toggleBtn.setAttribute("aria-expanded", "false");
+    document.querySelector('main').addEventListener('click', () => {
+      if (sidebar.classList.contains('show')) {
+        sidebar.classList.remove('show');
+        toggleBtn.classList.remove('active');
+        toggleBtn.setAttribute('aria-expanded', 'false');
       }
     });
 
@@ -667,99 +616,94 @@
       if (currentCategory === cat) return;
       currentCategory = cat;
       hideDetailView();
-      if (cat === "movies") {
-        moviesContent.style.display = "";
-        seriesContent.style.display = "none";
-        navMoviesBtn.classList.add("selected");
-        navMoviesBtn.setAttribute("aria-current", "page");
-        navSeriesBtn.classList.remove("selected");
-        navSeriesBtn.removeAttribute("aria-current");
+      if (cat === 'movies') {
+        moviesContent.style.display = '';
+        seriesContent.style.display = 'none';
+        navMoviesBtn.classList.add('selected');
+        navMoviesBtn.setAttribute('aria-current', 'page');
+        navSeriesBtn.classList.remove('selected');
+        navSeriesBtn.removeAttribute('aria-current');
       } else {
-        moviesContent.style.display = "none";
-        seriesContent.style.display = "";
-        navSeriesBtn.classList.add("selected");
-        navSeriesBtn.setAttribute("aria-current", "page");
-        navMoviesBtn.classList.remove("selected");
-        navMoviesBtn.removeAttribute("aria-current");
+        moviesContent.style.display = 'none';
+        seriesContent.style.display = '';
+        navSeriesBtn.classList.add('selected');
+        navSeriesBtn.setAttribute('aria-current', 'page');
+        navMoviesBtn.classList.remove('selected');
+        navMoviesBtn.removeAttribute('aria-current');
       }
-      searchContainer.style.display = "";
-      searchInput.value = "";
+      searchContainer.style.display = '';
+      searchInput.value = '';
       updateSearchPlaceholder();
       renderAllSections();
-      if (sidebar.classList.contains("show")) {
-        sidebar.classList.remove("show");
-        toggleBtn.classList.remove("active");
-        toggleBtn.setAttribute("aria-expanded", "false");
-      }
     }
-    navMoviesBtn.addEventListener("click", () => switchCategory("movies"));
-    navSeriesBtn.addEventListener("click", () => switchCategory("series"));
+    navMoviesBtn.addEventListener('click', () => switchCategory('movies'));
+    navSeriesBtn.addEventListener('click', () => switchCategory('series'));
 
     function setLanguage(lang) {
       if (!translations[lang]) return;
       currentLanguage = lang;
-      languageButtons.forEach((btn) => {
-        btn.classList.toggle("selected", btn.dataset.lang === lang);
+      languageButtons.forEach(btn => {
+        btn.classList.toggle('selected', btn.dataset.lang === lang);
       });
       updateUIStrings();
-      if (currentDetailItem) {
+      if(currentDetailItem) {
         renderDetail(currentDetailItem, currentDetailIsSeries);
       }
       renderAllSections();
     }
-    languageButtons.forEach((btn) => {
-      btn.addEventListener("click", () => setLanguage(btn.dataset.lang));
+    languageButtons.forEach(btn => {
+      btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
     });
 
     const translations = {
       en: {
-        searchPlaceholder: "Search movies...",
-        navMovies: "Movies",
-        navSeries: "Series",
+        searchPlaceholder: 'Search movies...',
+        navMovies: 'Movies',
+        navSeries: 'Series',
         sections: {
-          newReleases: "New Releases",
-          mostlyWatched: "Mostly Watched",
-          classics: "Classics",
-          popularSeries: "Popular Series",
-          newSeries: "New Series",
+          newReleases: 'New Releases',
+          mostlyWatched: 'Mostly Watched',
+          classics: 'Classics',
+          popularSeries: 'Popular Series',
+          newSeries: 'New Series'
         },
-        downloadLabel: "Download",
-        languageName: "English",
-        noItemsMessage: "No items found.",
-        backButton: "Back to list",
+        downloadLabel: 'Download',
+        languageName: 'English',
+        noItemsMessage: 'No items found.',
+        backButton: 'Back to list'
       },
       es: {
-        searchPlaceholder: "Buscar películas...",
-        navMovies: "Películas",
-        navSeries: "Series",
+        searchPlaceholder: 'Buscar películas...',
+        navMovies: 'Películas',
+        navSeries: 'Series',
         sections: {
-          newReleases: "Nuevos Lanzamientos",
-          mostlyWatched: "Más Vistos",
-          classics: "Clásicos",
-          popularSeries: "Series Populares",
-          newSeries: "Nuevas Series",
+          newReleases: 'Nuevos Lanzamientos',
+          mostlyWatched: 'Más Vistos',
+          classics: 'Clásicos',
+          popularSeries: 'Series Populares',
+          newSeries: 'Nuevas Series'
         },
-        downloadLabel: "Descargar",
-        languageName: "Español",
-        noItemsMessage: "No se encontraron resultados.",
-        backButton: "Volver a la lista",
+        downloadLabel: 'Descargar',
+        languageName: 'Español',
+        noItemsMessage: 'No se encontraron resultados.',
+        backButton: 'Volver a la lista'
       },
       fr: {
-        searchPlaceholder: "Rechercher des films...",
-        navMovies: "Films",
-        navSeries: "Séries",
+        searchPlaceholder: 'Rechercher des films...',
+        navMovies: 'Films',
+        navSeries: 'Séries',
         sections: {
-          newReleases: "Nouvelles Sorties",
-          mostlyWatched: "Les Plus Regardés",
-          classics: "Classiques",
-          popularSeries: "Séries Populaires",
-          newSeries: "Nouvelles Séries",
+          newReleases: 'Nouvelles Sorties',
+          mostlyWatched: 'Les Plus Regardés',
+          classics: 'Classiques',
+          popularSeries: 'Séries Populaires',
+          newSeries: 'Nouvelles Séries'
         },
-        downloadLabel: "Télécharger",
-        languageName: "Français",
-        noItemsMessage: "Aucun résultat trouvé.",
-        backButton: "Retour à la liste",
-      },
+        downloadLabel: 'Télécharger',
+        languageName: 'Français',
+        noItemsMessage: 'Aucun résultat trouvé.',
+        backButton: 'Retour à la liste'
+      }
     };
 
     function updateUIStrings() {
@@ -767,40 +711,42 @@
       searchInput.placeholder = t.searchPlaceholder;
       navMoviesBtn.textContent = t.navMovies;
       navSeriesBtn.textContent = t.navSeries;
-      sectionHeaders.forEach((header) => {
+      sectionHeaders.forEach(header => {
         const key = header.dataset.key;
         if (t.sections[key]) header.textContent = t.sections[key];
       });
-      document.querySelectorAll(".download-btn").forEach((btn) => {
+      document.querySelectorAll('.download-btn').forEach(btn => {
         btn.textContent = t.downloadLabel;
-        const ariaLabel = btn.getAttribute("aria-label");
+        const ariaLabel = btn.getAttribute('aria-label');
         if (ariaLabel) {
-          const itemTitle = ariaLabel.replace(/^(Download|Descargar|Télécharger)\s*/, "");
-          btn.setAttribute("aria-label", `${t.downloadLabel} ${itemTitle}`);
+          const itemTitle = ariaLabel.replace(/^(Download|Descargar|Télécharger)\s*/, '');
+          btn.setAttribute('aria-label', `${t.downloadLabel} ${itemTitle}`);
         }
       });
     }
 
     function displayItems(items, container, isSeries = false) {
-      container.innerHTML = "";
+      container.innerHTML = '';
       if (!items.length) {
-        const noMsg = translations[currentLanguage]?.noItemsMessage || "No items found.";
+        const noMsg = translations[currentLanguage]?.noItemsMessage || 'No items found.';
         container.innerHTML = `<p class="no-items-message">${noMsg}</p>`;
         return;
       }
-      items.forEach((item) => {
-        const card = document.createElement("div");
-        card.className = isSeries ? "series-card" : "movie-card";
+      items.forEach(item => {
+        const card = document.createElement('div');
+        card.className = isSeries ? 'series-card' : 'movie-card';
         card.tabIndex = 0;
         card.innerHTML = `
-          <img src="${item.poster}" alt="${isSeries ? "Poster of series " : "Poster of movie "}${item.title}" class="poster" loading="lazy" />
-          <div class="${isSeries ? "series-info" : "movie-info"}">
-            <h3 class="${isSeries ? "series-title" : "movie-title"}">${item.title}</h3>
-            <div class="${isSeries ? "series-genre" : "movie-genre"}">${item.genre}</div>
-            <p class="${isSeries ? "series-description" : "movie-description"}">${item.description}</p>
+          <img src="${item.poster}" alt="${isSeries ? 'Poster of series ' : 'Poster of movie '}${item.title}" class="poster" loading="lazy" />
+          <div class="${isSeries ? 'series-info' : 'movie-info'}">
+            <h3 class="${isSeries ? 'series-title' : 'movie-title'}">${item.title}</h3>
+            <div class="${isSeries ? 'series-genre' : 'movie-genre'}">${item.genre}</div>
+            <p class="${isSeries ? 'series-description' : 'movie-description'}">${item.description}</p>
           </div>
         `;
-        card.onclick = () => showDetailView(item, isSeries);
+        card.onclick = () => {
+          showDetailView(item, isSeries);
+        };
         container.appendChild(card);
       });
     }
@@ -808,14 +754,14 @@
     function filterItemsByQuery(itemsArray, query) {
       if (!query) return itemsArray;
       query = query.toLowerCase();
-      return itemsArray.filter(
-        (item) =>
-          item.title.toLowerCase().includes(query) ||
-          item.genre.toLowerCase().includes(query) ||
-          item.description.toLowerCase().includes(query)
+      return itemsArray.filter(item =>
+        item.title.toLowerCase().includes(query) ||
+        item.genre.toLowerCase().includes(query) ||
+        item.description.toLowerCase().includes(query)
       );
     }
 
+    // Auto scroll only for New Releases container
     function startAutoScroll(containerEl) {
       if (!containerEl) return;
       let direction = 1;
@@ -826,65 +772,79 @@
         if (containerEl.scrollLeft + containerEl.clientWidth >= containerEl.scrollWidth - 1) direction = -1;
         else if (containerEl.scrollLeft <= 0) direction = 1;
       }, 16);
-      containerEl.addEventListener("mouseenter", () => clearInterval(containerEl._scrollInterval));
-      containerEl.addEventListener("mouseleave", () => startAutoScroll(containerEl));
-      containerEl.addEventListener("focusin", () => clearInterval(containerEl._scrollInterval));
-      containerEl.addEventListener("focusout", () => startAutoScroll(containerEl));
+      containerEl.addEventListener('mouseenter', () => clearInterval(containerEl._scrollInterval));
+      containerEl.addEventListener('mouseleave', () => startAutoScroll(containerEl));
+      containerEl.addEventListener('focusin', () => clearInterval(containerEl._scrollInterval));
+      containerEl.addEventListener('focusout', () => startAutoScroll(containerEl));
     }
 
-    let containersMap = { movies: [], series: [] };
+    let containers = {
+      movies: [],
+      series: []
+    };
+
     let currentDetailItem = null;
     let currentDetailIsSeries = false;
 
     function showDetailView(item, isSeries) {
       currentDetailItem = item;
       currentDetailIsSeries = isSeries;
-      listView.style.display = "none";
-      searchContainer.style.display = "none";
-      errorMessageEl.style.display = "none";
-      detailView.style.display = "block";
+      listView.style.display = 'none';
+      searchContainer.style.display = 'none';
+      errorMessageEl.style.display = 'none';
+      detailView.style.display = 'block';
       renderDetail(item, isSeries);
       detailView.focus();
-      clearInterval(document.getElementById("new-releases-container")._scrollInterval);
+      // Stop auto-scroll for new releases to avoid distraction
+      clearInterval(document.getElementById('new-releases-container')._scrollInterval);
     }
 
     function hideDetailView() {
       currentDetailItem = null;
       currentDetailIsSeries = false;
-      detailView.style.display = "none";
-      listView.style.display = "";
-      searchContainer.style.display = "";
-      startAutoScroll(document.getElementById("new-releases-container"));
+      detailView.style.display = 'none';
+      listView.style.display = '';
+      searchContainer.style.display = '';
+      // Resume scroll on new releases
+      startAutoScroll(document.getElementById('new-releases-container'));
     }
 
     function renderDetail(item, isSeries) {
-      let t = translations[currentLanguage];
+      const t = translations[currentLanguage];
       detailView.innerHTML = `
-      <img src="${item.poster}" alt="${isSeries ? "Poster of series" : "Poster of movie"} ${item.title}" class="detail-poster" />
-      <h2>${item.title}</h2>
-      <div class="detail-genre">${item.genre}</div>
-      <div class="detail-description">${item.description}</div>
-      <a href="${item.downloadUrl}" class="detail-download-btn" download="${item.title.replace(/\s+/g, "_").toLowerCase()}.mp4" aria-label="${t.downloadLabel} ${item.title}">${t.downloadLabel}</a>
-      <button class="back-button" aria-label="${t.backButton}">${t.backButton}</button>`;
-      detailView.querySelector(".back-button").addEventListener("click", () => hideDetailView());
+        <img src="${item.poster}" alt="${isSeries ? 'Poster of series ' : 'Poster of movie '}${item.title}" class="detail-poster" />
+        <h2>${item.title}</h2>
+        <div class="detail-genre">${item.genre}</div>
+        <div class="detail-description">${item.description}</div>
+        <a href="${item.downloadUrl}" class="detail-download-btn" download="${item.title.replace(/\s+/g, '_').toLowerCase()}.mp4" aria-label="${t.downloadLabel} ${item.title}">${t.downloadLabel}</a>
+        <button class="back-button" aria-label="${t.backButton}">${t.backButton}</button>
+      `;
+      detailView.querySelector('.back-button').addEventListener('click', () => {
+        hideDetailView();
+      });
     }
 
     function renderAllSections() {
       if (!moviesData || !seriesData) return;
       const query = searchInput.value.trim().toLowerCase();
-      if (currentCategory === "movies") {
-        moviesContent.style.display = "";
-        seriesContent.style.display = "none";
-        containersMap.movies.forEach((c) => {
+      if (currentCategory === 'movies') {
+        moviesContent.style.display = '';
+        seriesContent.style.display = 'none';
+        const conts = containersMap.movies;
+        conts.forEach(c => {
           let filtered = filterItemsByQuery(c.data, query);
           displayItems(filtered, c.el, false);
-          if (c.key === "newReleases") startAutoScroll(c.el);
-          else clearInterval(c.el._scrollInterval);
+          if (c.key === 'newReleases') {
+            startAutoScroll(c.el);
+          } else {
+            clearInterval(c.el._scrollInterval);
+          }
         });
       } else {
-        moviesContent.style.display = "none";
-        seriesContent.style.display = "";
-        containersMap.series.forEach((c) => {
+        moviesContent.style.display = 'none';
+        seriesContent.style.display = '';
+        const conts = containersMap.series;
+        conts.forEach(c => {
           let filtered = filterItemsByQuery(c.data, query);
           displayItems(filtered, c.el, true);
           clearInterval(c.el._scrollInterval);
@@ -893,48 +853,46 @@
     }
 
     function updateSearchPlaceholder() {
-      let basePlaceholder = translations[currentLanguage].searchPlaceholder;
-      searchInput.placeholder =
-        currentCategory === "movies"
-          ? basePlaceholder.replace("movies", translations[currentLanguage].navMovies.toLowerCase())
-          : basePlaceholder.replace("movies", translations[currentLanguage].navSeries.toLowerCase());
+      const basePlaceholder = translations[currentLanguage].searchPlaceholder;
+      searchInput.placeholder = currentCategory === 'movies'
+        ? basePlaceholder.replace('movies', translations[currentLanguage].navMovies.toLowerCase())
+        : basePlaceholder.replace('movies', translations[currentLanguage].navSeries.toLowerCase());
     }
 
     async function loadDataAndInit() {
       try {
-        const response = await fetch("movies-data.json", { cache: "no-store" });
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+        const response = await fetch('movies-data.json',{cache:"no-store"});
+        if(!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
         const data = await response.json();
         moviesData = data.movies;
         seriesData = data.series;
         containersMap = {
           movies: [
-            { key: "newReleases", el: document.getElementById("new-releases-container"), data: moviesData.newReleases || [] },
-            { key: "mostlyWatched", el: document.getElementById("mostly-watched-container"), data: moviesData.mostlyWatched || [] },
-            { key: "classics", el: document.getElementById("classics-container"), data: moviesData.classics || [] },
+            { key: 'newReleases', el: document.getElementById('new-releases-container'), data: moviesData.newReleases || [] },
+            { key: 'mostlyWatched', el: document.getElementById('mostly-watched-container'), data: moviesData.mostlyWatched || [] },
+            { key: 'classics', el: document.getElementById('classics-container'), data: moviesData.classics || [] }
           ],
           series: [
-            { key: "popularSeries", el: document.getElementById("popular-series-container"), data: seriesData.popularSeries || [] },
-            { key: "newSeries", el: document.getElementById("new-series-container"), data: seriesData.newSeries || [] },
-          ],
+            { key: 'popularSeries', el: document.getElementById('popular-series-container'), data: seriesData.popularSeries || [] },
+            { key: 'newSeries', el: document.getElementById('new-series-container'), data: seriesData.newSeries || [] }
+          ]
         };
-        errorMessageEl.style.display = "none";
-        moviesContent.style.display = "block";
-        searchContainer.style.display = "";
+        errorMessageEl.style.display = 'none';
+        moviesContent.style.display = 'block';
+        searchContainer.style.display = '';
         updateUIStrings();
         updateSearchPlaceholder();
         renderAllSections();
-      } catch (error) {
-        console.error("Failed to load movie data JSON:", error);
-        errorMessageEl.textContent = "Failed to load movie data. Please try again later.";
-        errorMessageEl.style.display = "block";
+      } catch(error) {
+        console.error('Failed to load movie data JSON:', error);
+        errorMessageEl.textContent = 'Failed to load movie data. Please try again later.';
+        errorMessageEl.style.display = 'block';
       }
     }
 
-    searchInput.addEventListener("input", renderAllSections);
+    searchInput.addEventListener('input', renderAllSections);
 
     loadDataAndInit();
   </script>
 </body>
 </html>
-
