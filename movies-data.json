@@ -19,19 +19,43 @@
       },
       {
         "title": "Prathi Niraparadhiyano 2025",
-        "genre": "drama",
+        "genre": "Drama",
         "description": "A dramatic movie",
         "poster": "https://media-hosting.imagekit.io/3bd4d45153d348d3/IMG_20250510_205719_896.jpg?Expires=1841499425&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=2C79eP2H5roJhcZtjp3UnkuDAJUEc-H9Utwvnle702SuDWBRpwC~S2KRCDPxDFiQMhg0FeFQRSg5R56ZZouy36HPek1xUNqXhOUCFxF-Y34xIMEERzc2hdQzjirfWckWzcPtSoytO-o~7nZtpvfj6pvgkiCVgmMHqywWrPcnWoXB6BUCfz3Ufn6nUXb6y8Y05~RmsWZt0iMoqcQMZI2GpJ5Lip97P7uwNdc0-~xZHM6-OFZO8AEhPufjMdI4~QQctf~cYf5zK~nzPGBBxmwwZLdyXEIS1jpdhmJzlTkt~fk9aArjuZYFJNNC~Dlr9dXrKEc8gm-Ofoklu1RdQrDRag__",
         "downloadUrl": "#",
         "language": "malayalam"
       },
-       {
+      {
         "title": "Dassettante Cycle 2025",
-        "genre": "drama",
+        "genre": "Drama",
         "description": "A suspenseful story set around a mysterious lake.",
         "poster": "https://vault.pictures/p/5b78883a221040eaa99c451af13b7b32",
         "downloadUrl": "#",
         "language": "english"
+      },
+      {
+        "title": "Manjummel Boys",
+        "genre": "Thriller",
+        "description": "A group of friends face unexpected danger in a cave expedition.",
+        "poster": "https://m.media-amazon.com/images/M/MV5BZDZhMGZmMDIt.jpg",
+        "downloadUrl": "#",
+        "language": "malayalam"
+      },
+      {
+        "title": "Aavesham",
+        "genre": "Action/Comedy",
+        "description": "An action-packed entertainer with explosive performances.",
+        "poster": "https://m.media-amazon.com/images/M/MV5BZjFiYjcwNzkt.jpg",
+        "downloadUrl": "#",
+        "language": "malayalam"
+      },
+      {
+        "title": "Premalu",
+        "genre": "Romance/Comedy",
+        "description": "A light-hearted love story full of fun and emotions.",
+        "poster": "https://m.media-amazon.com/images/M/MV5BN2VjNTA5ZjYt.jpg",
+        "downloadUrl": "#",
+        "language": "malayalam"
       }
     ],
     "mostlyWatched": [
@@ -76,4 +100,3 @@
     ]
   }
 }
-
