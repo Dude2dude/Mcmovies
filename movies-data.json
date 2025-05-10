@@ -2,71 +2,62 @@
   "movies": {
     "newReleases": [
       {
-        "title": "Avatar",
-        "year": "2009",
-        "genre": "Action, Adventure, Fantasy",
-        "description": "A paraplegic Marine dispatched to the moon Pandora on a unique mission becomes torn between following his orders and protecting the world he feels is his home.",
-        "poster": "assets/images/avatar.jpg",
-        "downloadUrl": "assets/videos/avatar.mp4"
+        "title": "Red Dawn",
+        "genre": "Action",
+        "description": "A thrilling new action movie about revolution.",
+        "poster": "https://via.placeholder.com/180x270/ff3c3c/fff?text=Red+Dawn",
+        "downloadUrl": "#",
+        "language": "english"
       },
       {
-        "title": "Inception",
-        "year": "2010",
-        "genre": "Action, Sci-Fi, Thriller",
-        "description": "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a CEO.",
-        "poster": "assets/images/inception.jpg",
-        "downloadUrl": "assets/videos/inception.mp4"
-      },
-      {
-        "title": "The Dark Knight",
-        "year": "2008",
-        "genre": "Action, Crime, Drama",
-        "description": "When the menace known as the Joker emerges from his mysterious past, he wreaks havoc and chaos on the people of Gotham.",
-        "poster": "assets/images/dark_knight.jpg",
-        "downloadUrl": "assets/videos/dark_knight.mp4"
+        "title": "Mystery Lake",
+        "genre": "Thriller",
+        "description": "A suspenseful story set around a mysterious lake.",
+        "poster": "https://via.placeholder.com/180x270/ff4c4c/fff?text=Mystery+Lake",
+        "downloadUrl": "#",
+        "language": "english"
       }
     ],
     "mostlyWatched": [
       {
-        "title": "The Shawshank Redemption",
-        "year": "1994",
-        "genre": "Drama",
-        "description": "Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.",
-        "poster": "assets/images/shawshank.jpg",
-        "downloadUrl": "assets/videos/shawshank.mp4"
+        "title": "Old Western",
+        "genre": "Western",
+        "description": "Classic western adventures on the frontier.",
+        "poster": "https://via.placeholder.com/180x270/cc4444/fff?text=Old+Western",
+        "downloadUrl": "#",
+        "language": "english"
       }
     ],
     "classics": [
       {
-        "title": "Casablanca",
-        "year": "1942",
-        "genre": "Drama, Romance, War",
-        "description": "In Casablanca in December 1941, a cynical American expatriate encounters a former lover, with unforeseen complications.",
-        "poster": "assets/images/casablanca.jpg",
-        "downloadUrl": "assets/videos/casablanca.mp4"
+        "title": "Golden Age",
+        "genre": "Drama",
+        "description": "A tale from the golden age of cinema.",
+        "poster": "https://via.placeholder.com/180x270/aa3333/fff?text=Golden+Age",
+        "downloadUrl": "#",
+        "language": "english"
       }
     ]
   },
   "series": {
     "popularSeries": [
       {
-        "title": "Breaking Bad",
-        "year": "2008-2013",
-        "genre": "Crime, Drama, Thriller",
-        "description": "A high school chemistry teacher turned methamphetamine manufacturer faces moral dilemmas and dangerous adversaries.",
-        "poster": "assets/images/breaking_bad.jpg",
-        "downloadUrl": "assets/videos/breaking_bad.mp4"
+        "title": "Space Odyssey",
+        "genre": "Sci-Fi",
+        "description": "A futuristic journey beyond the stars.",
+        "poster": "https://via.placeholder.com/180x270/cc5555/fff?text=Space+Odyssey",
+        "downloadUrl": "#"
       }
     ],
     "newSeries": [
       {
-        "title": "The Mandalorian",
-        "year": "2019-present",
-        "genre": "Action, Adventure, Fantasy",
-        "description": "The travels of a lone bounty hunter in the outer reaches of the galaxy, far from the authority of the New Republic.",
-        "poster": "assets/images/mandalorian.jpg",
-        "downloadUrl": "assets/videos/mandalorian.mp4"
+        "title": "Urban Legends",
+        "genre": "Horror",
+        "description": "New series exploring the darkest urban legends.",
+        "poster": "https://via.placeholder.com/180x270/dd6666/fff?text=Urban+Legends",
+        "downloadUrl": "#"
       }
     ]
   }
 }
+
