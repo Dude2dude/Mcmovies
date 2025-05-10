@@ -579,9 +579,12 @@
     <div class="languages" aria-label="Select language">
       <h2>Language</h2>
       <ul>
-        <li><button type="button" class="language-btn selected" data-lang="en">English</button></li>
-        <li><button type="button" class="language-btn" data-lang="es">Spanish</button></li>
-        <li><button type="button" class="language-btn" data-lang="fr">French</button></li>
+        <li><button type="button" class="language-btn selected" data-lang="all">All</button></li>
+        <li><button type="button" class="language-btn" data-lang="english">English</button></li>
+        <li><button type="button" class="language-btn" data-lang="malayalam">Malayalam</button></li>
+        <li><button type="button" class="language-btn" data-lang="tamil">Tamil</button></li>
+        <li><button type="button" class="language-btn" data-lang="hindi">Hindi</button></li>
+        <li><button type="button" class="language-btn" data-lang="telugu">Telugu</button></li>
       </ul>
     </div>
   </aside>
@@ -647,7 +650,7 @@
     const sidebarCloseBtn = document.getElementById('sidebar-close-btn');
 
     let currentCategory = 'movies';
-    let currentLanguage = 'en';
+    let currentLanguage = 'all';
 
     let moviesData = null;
     let seriesData = null;
@@ -703,12 +706,11 @@
     navSeriesBtn.addEventListener('click', () => switchCategory('series'));
 
     function setLanguage(lang) {
-      if (!translations[lang]) return;
       currentLanguage = lang;
       languageButtons.forEach(btn => {
         btn.classList.toggle('selected', btn.dataset.lang === lang);
       });
-      updateUIStrings();
+      // No translation update needed for the language buttons text themselves here, only the interface strings.
       if(currentDetailItem) {
         renderDetail(currentDetailItem, currentDetailIsSeries);
       }
@@ -718,60 +720,13 @@
       btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
     });
 
-    const translations = {
-      en: {
-        searchPlaceholder: 'Search movies...',
-        navMovies: 'Movies',
-        navSeries: 'Series',
-        sections: {
-          newReleases: 'New Releases',
-          mostlyWatched: 'Mostly Watched',
-          classics: 'Classics',
-          popularSeries: 'Popular Series',
-          newSeries: 'New Series'
-        },
-        downloadLabel: 'Download',
-        languageName: 'English',
-        noItemsMessage: 'No items found.',
-        backButton: 'Back to list'
-      },
-      es: {
-        searchPlaceholder: 'Buscar películas...',
-        navMovies: 'Películas',
-        navSeries: 'Series',
-        sections: {
-          newReleases: 'Nuevos Lanzamientos',
-          mostlyWatched: 'Más Vistos',
-          classics: 'Clásicos',
-          popularSeries: 'Series Populares',
-          newSeries: 'Nuevas Series'
-        },
-        downloadLabel: 'Descargar',
-        languageName: 'Español',
-        noItemsMessage: 'No se encontraron resultados.',
-        backButton: 'Volver a la lista'
-      },
-      fr: {
-        searchPlaceholder: 'Rechercher des films...',
-        navMovies: 'Films',
-        navSeries: 'Séries',
-        sections: {
-          newReleases: 'Nouvelles Sorties',
-          mostlyWatched: 'Les Plus Regardés',
-          classics: 'Classiques',
-          popularSeries: 'Séries Populaires',
-          newSeries: 'Nouvelles Séries'
-        },
-        downloadLabel: 'Télécharger',
-        languageName: 'Français',
-        noItemsMessage: 'Aucun résultat trouvé.',
-        backButton: 'Retour à la liste'
-      }
-    };
+    // Keep translations as before, can be extended if needed but not mandatory for languages filter
 
     function updateUIStrings() {
-      let t = translations[currentLanguage];
-      searchInput.placeholder = t.searchPlaceholder;
+      let t = translations[currentLanguage] || translations.en;
+      searchInput.placeholder = currentCategory === 'movies'
+        ? t.searchPlaceholder.replace('movies', t.navMovies.toLowerCase())
+        : t.searchPlaceholder.replace('movies', t.navSeries.toLowerCase());
       navMoviesBtn.textContent = t.navMovies;
       navSeriesBtn.textContent = t.navSeries;
       sectionHeaders.forEach(header => {
@@ -829,6 +784,17 @@
       );
     }
 
+    // New function: filter items by language if in movies category
+    function filterItemsByLanguage(itemsArray, language) {
+      if (!language || language === 'all') return itemsArray;
+      return itemsArray.filter(item => {
+        // Normalize language info in item - we expect lower case comparison
+        // Assuming movie items have a 'language' field with language name lowercase or mixed case
+        if (!item.language) return false;
+        return item.language.toLowerCase() === language.toLowerCase();
+      });
+    }
+
     // Auto scroll only for New Releases container
     function startAutoScroll(containerEl) {
       if (!containerEl) return;
@@ -878,7 +844,7 @@
     }
 
     function renderDetail(item, isSeries) {
-      const t = translations[currentLanguage];
+      const t = translations[currentLanguage] || translations.en;
       detailView.innerHTML = `
         <img src="${item.poster}" alt="${isSeries ? 'Poster of series ' : 'Poster of movie '}${item.title}" class="detail-poster" />
         <h2>${item.title}</h2>
@@ -901,6 +867,7 @@
         const conts = containersMap.movies;
         conts.forEach(c => {
           let filtered = filterItemsByQuery(c.data, query);
+          filtered = filterItemsByLanguage(filtered, currentLanguage);
           displayItems(filtered, c.el, false);
           if (c.key === 'newReleases') {
             startAutoScroll(c.el);
@@ -914,6 +881,7 @@
         const conts = containersMap.series;
         conts.forEach(c => {
           let filtered = filterItemsByQuery(c.data, query);
+          // Do not filter series by language as per requirements
           displayItems(filtered, c.el, true);
           clearInterval(c.el._scrollInterval);
         });
@@ -921,15 +889,15 @@
     }
 
     function updateSearchPlaceholder() {
-      const basePlaceholder = translations[currentLanguage].searchPlaceholder;
+      const basePlaceholder = translations[currentLanguage]?.searchPlaceholder || "Search movies...";
       searchInput.placeholder = currentCategory === 'movies'
-        ? basePlaceholder.replace('movies', translations[currentLanguage].navMovies.toLowerCase())
-        : basePlaceholder.replace('movies', translations[currentLanguage].navSeries.toLowerCase());
+        ? basePlaceholder.replace('movies', translations[currentLanguage]?.navMovies.toLowerCase() || "movies")
+        : basePlaceholder.replace('movies', translations[currentLanguage]?.navSeries.toLowerCase() || "series");
     }
 
     async function loadDataAndInit() {
       try {
-        const response = await fetch('movies-data.json',{cache:"no-store"});
+        const response = await fetch('movies-data.json', {cache:"no-store"});
         if(!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
         const data = await response.json();
         moviesData = data.movies;
