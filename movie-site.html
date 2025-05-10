@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+<!DOCTYPE html >
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-<title>My Movie Site</title>
+<title> My Movie Site </title>
 <style>
   /* Reset and base */
   * {
@@ -328,22 +328,22 @@
 </head>
 <body>
 <button id="toggle-btn" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="sidebar" title="Toggle menu">
-  <div>/div>div>/div>div>/div>
+  <div> </div><div></div><div></div>
 </button>
 <aside id="sidebar" role="navigation" aria-label="Main navigation">
-  <h1>My Movie Site/h1>
+  <h1>My Movie Site</h1>
   <nav>
     <ul>
-      <li>button type="button" id="nav-movies" class="selected" aria-current="page">Movies</button></li>
-      <li>button type="button" id="nav-series">Series/button>/li>
+      <li> <button type="button" id="nav-movies" class="selected" aria-current="page"> Movies </button></li>
+      <li><button type="button" id="nav-series">Series</button></li>
     </ul>
  </nav>
   <div class="languages" aria-label="Select language">
-    <h2>Language/h2>
+    <h2>Language</h2>
     <ul>
-      <li>button type="button" class="language-btn selected" data-lang="en">English/button>/li>
-      <li>button type="button" class="language-btn" data-lang="es">Spanish/button>/li>
-      <li>button type="button" class="language-btn" data-lang="fr">French/button>/li>
+      <li><button type="button" class="language-btn selected" data-lang="en">English</button></li>
+      <li><button type="button" class="language-btn" data-lang="es">Spanish</button></li>
+      <li><button type="button" class="language-btn" data-lang="fr">French</button></li>
     </ul>
   </div>
 </aside>
@@ -351,26 +351,26 @@
   <div id="search-container">
     <input type="text" id="search" placeholder="Search movies..." aria-label="Search movies" />
   </div>
-  <div id="error-message" role="alert" aria-live="assertive" style="display:none;">/div>
+  <div id="error-message" role="alert" aria-live="assertive" style="display:none;"></div>
 
   !-- Movies sections container -->
   <div id="movies-content" style="display:none;">
     <section aria-label="New Releases">
-      <h2 class="section-header" data-key="newReleases">New Releases/h2>
+      <h2 class="section-header" data-key="newReleases">New Releases</h2>
       <div class="items-scroll-container" id="new-releases-container" tabindex="0" aria-live="polite" aria-relevant="additions removals">
         !-- New Releases movies inserted here -->
       </div>
     </section>
 
     <section aria-label="Mostly Watched">
-      <h2 class="section-header" data-key="mostlyWatched">Mostly Watched/h2>
+      <h2 class="section-header" data-key="mostlyWatched">Mostly Watched</h2>
       <div class="items-scroll-container" id="mostly-watched-container" tabindex="0" aria-live="polite" aria-relevant="additions removals">
         !-- Mostly Watched movies inserted here -->
       </div>
     </section>
 
     <section aria-label="Classics">
-      <h2 class="section-header" data-key="classics">Classics/h2>
+      <h2 class="section-header" data-key="classics">Classics</h2>
       <div class="items-scroll-container" id="classics-container" tabindex="0" aria-live="polite" aria-relevant="additions removals">
         !-- Classics movies inserted here -->
       </div>
@@ -380,14 +380,14 @@
   !-- Series sections container (hidden by default) -->
   <div id="series-content" style="display:none;">
     <section aria-label="Popular Series">
-      <h2 class="section-header" data-key="popularSeries">Popular Series/h2>
+      <h2 class="section-header" data-key="popularSeries">Popular Series</h2>
       <div class="items-scroll-container" id="popular-series-container" tabindex="0" aria-live="polite" aria-relevant="additions removals">
         !-- Popular Series inserted here -->
       </div>
     </section>
 
     <section aria-label="New Series">
-      <h2 class="section-header" data-key="newSeries">New Series/h2>
+      <h2 class="section-header" data-key="newSeries">New Series</h2>
       <div class="items-scroll-container" id="new-series-container" tabindex="0" aria-live="polite" aria-relevant="additions removals">
         !-- New Series inserted here -->
       </div>
@@ -568,13 +568,13 @@
       card.tabIndex = 0;
 
       card.innerHTML = `
-        img src="${item.poster}" alt="${isSeries ? 'Poster of series ' : 'Poster of movie '}${item.title}" class="poster" loading="lazy"/>
-        div class="${isSeries ? 'series-info' : 'movie-info'}">
-          h3 class="${isSeries ? 'series-title' : 'movie-title'}">${item.title}/h3>
-          div class="${isSeries ? 'series-genre' : 'movie-genre'}">${item.genre}/div>
-          p class="${isSeries ? 'series-description' : 'movie-description'}">${item.description}/p>
-          a href="${item.downloadUrl}" class="download-btn" download="${item.title.replace(/\s+/g, '_').toLowerCase()}.mp4" aria-label="${translations[currentLanguage].downloadLabel} ${item.title}">${translations[currentLanguage].downloadLabel}/a>
-        /div>
+        <img src="${item.poster}" alt="${isSeries ? 'Poster of series ' : 'Poster of movie '}${item.title}" class="poster" loading="lazy"/>
+        <div class="${isSeries ? 'series-info' : 'movie-info'}">
+          <h3 class="${isSeries ? 'series-title' : 'movie-title'}">${item.title}</h3>
+          <div class="${isSeries ? 'series-genre' : 'movie-genre'}">${item.genre}</div>
+          <p class="${isSeries ? 'series-description' : 'movie-description'}">${item.description}</p>
+          <a href="${item.downloadUrl}" class="download-btn" download="${item.title.replace(/\s+/g, '_').toLowerCase()}.mp4" aria-label="${translations[currentLanguage].downloadLabel} ${item.title}">${translations[currentLanguage].downloadLabel}</a>
+        </div>
       `;
       container.appendChild(card);
     });
