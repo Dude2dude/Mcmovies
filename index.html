@@ -1,9 +1,10 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 <title>M C company</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
 <style>
   /* Reset and base */
   * {box-sizing: border-box;}
@@ -618,7 +619,7 @@
   <div class="app-container">
     <main>
       <div id="search-container">
-        <input type="text" id="search" placeholder="Search movies..." aria-label="Search movies" autocomplete="off" />
+        <input type="text" id="search" placeholder="Search movies or series..." aria-label="Search movies or series" autocomplete="off" />
       </div>
       <div id="error-message" role="alert" aria-live="assertive" style="display:none;"></div>
 
@@ -635,10 +636,15 @@
           <h2 class="section-header" id="current-category-title">New Released</h2>
           <div class="items-scroll-container" id="movies-container" tabindex="0" aria-live="polite" aria-relevant="additions removals"></div>
         </section>
+
+        <section aria-label="Series" style="margin-top: 2rem;">
+          <h2 class="section-header" id="series-category-title">All Series</h2>
+          <div class="items-scroll-container" id="series-container" tabindex="0" aria-live="polite" aria-relevant="additions removals"></div>
+        </section>
       </div>
 
-      <!-- Detail view for single movie -->
-      <div id="detail-view" tabindex="0" aria-live="polite" aria-label="Movie details"></div>
+      <!-- Detail view for single movie or series -->
+      <div id="detail-view" tabindex="0" aria-live="polite" aria-label="Details"></div>
     </main>
   </div>
 
@@ -649,120 +655,363 @@
 <script>
   const OMDB_API_KEY = '2a4113e'; // Replace with your OMDb API key
 
-const sidebar = document.getElementById('sidebar');
-// ... rest of your code
-  
-let currentCategory = 'newReleases';
-let currentLanguage = 'all';
-let moviesMinimal = [];
-let seriesMinimal = [];
-let moviesEnriched = [];
-let seriesEnriched = [];
+  const sidebar = document.getElementById('sidebar');
+  const toggleBtn = document.getElementById('toggle-btn');
+  const sidebarCloseBtn = document.getElementById('sidebar-close-btn');
+  const navMoviesBtn = document.getElementById('nav-movies');
+  const navSeriesBtn = document.getElementById('nav-series');
+  const movieCategoryTabs = Array.from(document.querySelectorAll('#movie-category-tabs button'));
+  const currentCategoryTitle = document.getElementById('current-category-title');
+  const seriesCategoryTitle = document.getElementById('series-category-title');
+  const moviesContainer = document.getElementById('movies-container');
+  const seriesContainer = document.getElementById('series-container');
+  const searchInput = document.getElementById('search');
+  const errorMessageEl = document.getElementById('error-message');
+  const detailView = document.getElementById('detail-view');
+  const languageButtons = Array.from(document.querySelectorAll('.language-btn'));
 
-// Load minimal data from JSON
-async function loadMinimalData() {
-  try {
-    const response = await fetch('movies-data.json', { cache: "no-store" });
-    if (!response.ok) throw new Error(`Failed to load movies-data.json: ${response.statusText}`);
-    const data = await response.json();
-    moviesMinimal = data.movies || [];
-    seriesMinimal = data.series || [];
-    errorMessageEl.style.display = 'none';
-  } catch (err) {
-    console.error(err);
-    errorMessageEl.textContent = 'Failed to load movie data. Please try again later.';
-    errorMessageEl.style.display = 'block';
-  }
-}
+  let currentNav = 'movies'; // 'movies' or 'series'
+  let currentMovieCategory = 'newReleases';
+  let currentLanguage = 'all';
+  let moviesMinimal = [];
+  let seriesMinimal = [];
+  let moviesEnriched = [];
+  let seriesEnriched = [];
 
-// Enrich movies and series by fetching details for each title
-async function enrichData() {
-  const enrichedMovies = [];
-  for (const movie of moviesMinimal) {
-    const details = await fetchMovieDetails(movie.title);
-    enrichedMovies.push({
-      title: details.title,
-      genre: details.genre,
-      description: details.description,
-      poster: details.poster,
-      downloadUrl: movie.downloadUrl,
-      language: (movie.language || 'all').toLowerCase(),
-      category: (movie.category || 'all')
-    });
-  }
-  moviesEnriched = enrichedMovies;
-
-  const enrichedSeries = [];
-  for (const series of seriesMinimal) {
-    const details = await fetchMovieDetails(series.title);
-    enrichedSeries.push({
-      title: details.title,
-      genre: details.genre,
-      description: details.description,
-      poster: details.poster,
-      downloadUrl: series.downloadUrl,
-      language: (series.language || 'all').toLowerCase(),
-      category: (series.category || 'all')
-    });
-  }
-  seriesEnriched = enrichedSeries;
-}
-
-// Filter movies and series by category, language and search query
-function filterData(category, lang, query) {
-  let filtered = [];
-  if (currentCategory === 'movies') {
-    filtered = moviesEnriched;
-  } else {
-    filtered = seriesEnriched;
-  }
-  
-  if (category && category !== 'all') filtered = filtered.filter(m => m.category === category);
-  if (lang && lang !== 'all') filtered = filtered.filter(m => m.language === lang);
-  if (query) {
-    const q = query.toLowerCase();
-    filtered = filtered.filter(m =>
-      m.title.toLowerCase().includes(q) ||
-      m.genre.toLowerCase().includes(q) ||
-      m.description.toLowerCase().includes(q)
-    );
-  }
-  return filtered;
-}
-
-// Update the navigation for movies and series
-navMoviesBtn.addEventListener('click', () => {
-  currentCategory = 'movies';
-  renderMoviesByCategory(currentCategory);
-});
-
-navSeriesBtn.addEventListener('click', () => {
-  currentCategory = 'series';
-  renderMoviesByCategory(currentCategory);
-});
-
-// Render movies or series for the given category
-function renderMoviesByCategory(category) {
-  currentCategory = category;
-  movieCategoryTabs.forEach(btn => {
-    btn.classList.toggle('selected', btn.dataset.category === category);
+  // Toggle sidebar on small screens
+  toggleBtn.addEventListener('click', () => {
+    const isShown = sidebar.classList.toggle('show');
+    toggleBtn.classList.toggle('active', isShown);
+    toggleBtn.setAttribute('aria-expanded', isShown ? 'true' : 'false');
   });
-  currentCategoryTitle.textContent = category.charAt(0).toUpperCase() + category.slice(1);
-  
-  const filteredData = filterData(currentCategory, currentLanguage, searchInput.value.trim());
-  displayMovieList(filteredData);
-}
 
-// Initialize app
-async function init() {
-  await loadMinimalData();
-  await enrichData();
-  renderMoviesByCategory(currentCategory);
-}
+  sidebarCloseBtn.addEventListener('click', () => {
+    sidebar.classList.remove('show');
+    toggleBtn.classList.remove('active');
+    toggleBtn.setAttribute('aria-expanded', 'false');
+  });
 
-init();
+  // Close sidebar when clicking outside on small screens
+  document.addEventListener('click', (e) => {
+    if (window.innerWidth <= 480) {
+      if (!sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
+        sidebar.classList.remove('show');
+        toggleBtn.classList.remove('active');
+        toggleBtn.setAttribute('aria-expanded', 'false');
+      }
+    }
+  });
 
-  
+  // Navigation buttons for movies and series
+  navMoviesBtn.addEventListener('click', () => {
+    if (currentNav !== 'movies') {
+      currentNav = 'movies';
+      navMoviesBtn.classList.add('selected');
+      navMoviesBtn.setAttribute('aria-current', 'page');
+      navSeriesBtn.classList.remove('selected');
+      navSeriesBtn.removeAttribute('aria-current');
+      movieCategoryTabs.forEach(btn => btn.style.display = 'inline-block');
+      currentCategoryTitle.style.display = 'block';
+      moviesContainer.parentElement.style.display = 'block';
+      seriesContainer.parentElement.style.display = 'none';
+      seriesCategoryTitle.style.display = 'none';
+      currentMovieCategory = 'newReleases';
+      movieCategoryTabs.forEach(btn => btn.classList.toggle('selected', btn.dataset.category === currentMovieCategory));
+      currentCategoryTitle.textContent = getCategoryTitle(currentMovieCategory);
+      filterAndRender();
+      closeSidebarOnMobile();
+    }
+  });
+
+  navSeriesBtn.addEventListener('click', () => {
+    if (currentNav !== 'series') {
+      currentNav = 'series';
+      navSeriesBtn.classList.add('selected');
+      navSeriesBtn.setAttribute('aria-current', 'page');
+      navMoviesBtn.classList.remove('selected');
+      navMoviesBtn.removeAttribute('aria-current');
+      movieCategoryTabs.forEach(btn => btn.style.display = 'none');
+      currentCategoryTitle.style.display = 'none';
+      moviesContainer.parentElement.style.display = 'none';
+      seriesContainer.parentElement.style.display = 'flex';
+      seriesCategoryTitle.style.display = 'block';
+      filterAndRender();
+      closeSidebarOnMobile();
+    }
+  });
+
+  // Movie category tabs click
+  movieCategoryTabs.forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (btn.dataset.category !== currentMovieCategory) {
+        currentMovieCategory = btn.dataset.category;
+        movieCategoryTabs.forEach(b => b.classList.toggle('selected', b === btn));
+        currentCategoryTitle.textContent = getCategoryTitle(currentMovieCategory);
+        filterAndRender();
+      }
+    });
+  });
+
+  // Language selection
+  languageButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (!btn.classList.contains('selected')) {
+        languageButtons.forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        currentLanguage = btn.dataset.lang.toLowerCase();
+        filterAndRender();
+        closeSidebarOnMobile();
+      }
+    });
+  });
+
+  // Search input
+  searchInput.addEventListener('input', () => {
+    filterAndRender();
+  });
+
+  // Close sidebar on mobile after selection
+  function closeSidebarOnMobile() {
+    if (window.innerWidth <= 480) {
+      sidebar.classList.remove('show');
+      toggleBtn.classList.remove('active');
+      toggleBtn.setAttribute('aria-expanded', 'false');
+    }
+  }
+
+  // Get category title text
+  function getCategoryTitle(category) {
+    switch(category) {
+      case 'newReleases': return 'New Released';
+      case 'mostlyWatched': return 'Mostly Watched';
+      case 'trending': return 'Trending';
+      case 'all': return 'All Movies';
+      default: return 'Movies';
+    }
+  }
+
+  // Fetch movie or series details from OMDb API
+  async function fetchMovieDetails(title) {
+    try {
+      const url = `https://www.omdbapi.com/?apikey=${OMDB_API_KEY}&t=${encodeURIComponent(title)}&plot=short`;
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`OMDb API error: ${response.statusText}`);
+      const data = await response.json();
+      if (data.Response === "False") {
+        return {
+          title: title,
+          genre: "Unknown",
+          description: "No description available.",
+          poster: "https://placehold.co/300x450/png?text=No+Image+Available",
+        };
+      }
+      return {
+        title: data.Title || title,
+        genre: data.Genre || "Unknown",
+        description: data.Plot && data.Plot !== "N/A" ? data.Plot : "No description available.",
+        poster: (data.Poster && data.Poster !== "N/A") ? data.Poster : "https://placehold.co/300x450/png?text=No+Image+Available",
+      };
+    } catch (error) {
+      console.error(error);
+      return {
+        title: title,
+        genre: "Unknown",
+        description: "No description available.",
+        poster: "https://placehold.co/300x450/png?text=No+Image+Available",
+      };
+    }
+  }
+
+  // Load minimal data from JSON
+  async function loadMinimalData() {
+    try {
+      const response = await fetch('movies-data.json', { cache: "no-store" });
+      if (!response.ok) throw new Error(`Failed to load movies-data.json: ${response.statusText}`);
+      const data = await response.json();
+      moviesMinimal = data.movies || [];
+      seriesMinimal = data.series || [];
+      errorMessageEl.style.display = 'none';
+    } catch (err) {
+      console.error(err);
+      errorMessageEl.textContent = 'Failed to load movie data. Please try again later.';
+      errorMessageEl.style.display = 'block';
+    }
+  }
+
+  // Enrich movies and series by fetching details for each title
+  async function enrichData() {
+    const enrichedMovies = [];
+    for (const movie of moviesMinimal) {
+      const details = await fetchMovieDetails(movie.title);
+      enrichedMovies.push({
+        title: details.title,
+        genre: details.genre,
+        description: details.description,
+        poster: details.poster,
+        downloadUrl: movie.downloadUrl,
+        language: (movie.language || 'all').toLowerCase(),
+        category: (movie.category || 'all')
+      });
+    }
+    moviesEnriched = enrichedMovies;
+
+    const enrichedSeries = [];
+    for (const series of seriesMinimal) {
+      const details = await fetchMovieDetails(series.title);
+      enrichedSeries.push({
+        title: details.title,
+        genre: details.genre,
+        description: details.description,
+        poster: details.poster,
+        downloadUrl: series.downloadUrl,
+        language: (series.language || 'all').toLowerCase(),
+        category: (series.category || 'all')
+      });
+    }
+    seriesEnriched = enrichedSeries;
+  }
+
+  // Filter movies or series by category, language and search query
+  function filterData(type, category, lang, query) {
+    let filtered = [];
+    if (type === 'movies') {
+      filtered = moviesEnriched;
+      if (category && category !== 'all') filtered = filtered.filter(m => m.category === category);
+    } else {
+      filtered = seriesEnriched;
+      // For series, no category tabs, so no category filtering needed
+    }
+    if (lang && lang !== 'all') filtered = filtered.filter(m => m.language === lang);
+    if (query) {
+      const q = query.toLowerCase();
+      filtered = filtered.filter(m =>
+        m.title.toLowerCase().includes(q) ||
+        m.genre.toLowerCase().includes(q) ||
+        m.description.toLowerCase().includes(q)
+      );
+    }
+    return filtered;
+  }
+
+  // Display movie list in container
+  function displayMovieList(movies) {
+    moviesContainer.innerHTML = '';
+    if (movies.length === 0) {
+      moviesContainer.innerHTML = `<div class="no-items-message" role="alert" aria-live="polite">No movies found.</div>`;
+      return;
+    }
+    movies.forEach(movie => {
+      const card = document.createElement('div');
+      card.className = 'movie-card';
+      card.tabIndex = 0;
+      card.setAttribute('role', 'button');
+      card.setAttribute('aria-label', `View details for movie ${movie.title}`);
+      card.innerHTML = `
+        <img src="${movie.poster}" alt="Poster image of movie titled ${movie.title}" class="poster" loading="lazy" />
+        <div class="movie-info">
+          <h3 class="movie-title">${movie.title}</h3>
+          <div class="movie-genre">${movie.genre}</div>
+          <div class="movie-description">${movie.description.length > 100 ? movie.description.slice(0, 100) + '...' : movie.description}</div>
+          <a href="${movie.downloadUrl}" class="download-btn" target="_blank" rel="noopener noreferrer" aria-label="Download ${movie.title}">Download</a>
+        </div>
+      `;
+      card.addEventListener('click', () => showDetailView(movie, 'movie'));
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          showDetailView(movie, 'movie');
+        }
+      });
+      moviesContainer.appendChild(card);
+    });
+  }
+
+  // Display series list in container
+  function displaySeriesList(seriesList) {
+    seriesContainer.innerHTML = '';
+    if (seriesList.length === 0) {
+      seriesContainer.innerHTML = `<div class="no-items-message" role="alert" aria-live="polite">No series found.</div>`;
+      return;
+    }
+    seriesList.forEach(series => {
+      const card = document.createElement('div');
+      card.className = 'series-card';
+      card.tabIndex = 0;
+      card.setAttribute('role', 'button');
+      card.setAttribute('aria-label', `View details for series ${series.title}`);
+      card.innerHTML = `
+        <img src="${series.poster}" alt="Poster image of series titled ${series.title}" class="poster" loading="lazy" />
+        <div class="series-info">
+          <h3 class="series-title">${series.title}</h3>
+          <div class="series-genre">${series.genre}</div>
+          <div class="series-description">${series.description.length > 100 ? series.description.slice(0, 100) + '...' : series.description}</div>
+          <a href="${series.downloadUrl}" class="download-btn" target="_blank" rel="noopener noreferrer" aria-label="Download ${series.title}">Download</a>
+        </div>
+      `;
+      card.addEventListener('click', () => showDetailView(series, 'series'));
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          showDetailView(series, 'series');
+        }
+      });
+      seriesContainer.appendChild(card);
+    });
+  }
+
+  // Show detail view for movie or series
+  function showDetailView(item, type) {
+    detailView.innerHTML = `
+      <img src="${item.poster}" alt="Poster image of ${type} titled ${item.title}" class="detail-poster" />
+      <h2>${item.title}</h2>
+      <div class="detail-genre">${item.genre}</div>
+      <div class="detail-description">${item.description}</div>
+      <a href="${item.downloadUrl}" class="detail-download-btn" target="_blank" rel="noopener noreferrer" aria-label="Download ${item.title}">${type === 'movie' ? 'Download Movie' : 'Download Series'}</a>
+      <button class="back-button" aria-label="Back to list">Back</button>
+    `;
+    detailView.style.display = 'flex';
+    detailView.focus();
+    // Hide list view
+    document.getElementById('list-view').style.display = 'none';
+
+    const backBtn = detailView.querySelector('.back-button');
+    backBtn.addEventListener('click', () => {
+      detailView.style.display = 'none';
+      document.getElementById('list-view').style.display = 'block';
+      searchInput.focus();
+    });
+  }
+
+  // Filter and render lists based on current filters
+  function filterAndRender() {
+    const query = searchInput.value.trim();
+    if (currentNav === 'movies') {
+      const filteredMovies = filterData('movies', currentMovieCategory, currentLanguage, query);
+      displayMovieList(filteredMovies);
+      seriesContainer.innerHTML = '';
+      seriesContainer.parentElement.style.display = 'none';
+      currentCategoryTitle.style.display = 'block';
+      moviesContainer.parentElement.style.display = 'block';
+      seriesCategoryTitle.style.display = 'none';
+    } else {
+      const filteredSeries = filterData('series', null, currentLanguage, query);
+      displaySeriesList(filteredSeries);
+      moviesContainer.innerHTML = '';
+      moviesContainer.parentElement.style.display = 'none';
+      currentCategoryTitle.style.display = 'none';
+      seriesContainer.parentElement.style.display = 'flex';
+      seriesCategoryTitle.style.display = 'block';
+    }
+  }
+
+  // Initialize app
+  async function init() {
+    await loadMinimalData();
+    await enrichData();
+    filterAndRender();
+  }
+
+  init();
 </script>
 
 </body>
