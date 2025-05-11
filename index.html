@@ -649,218 +649,120 @@
 <script>
   const OMDB_API_KEY = '2a4113e'; // Replace with your OMDb API key
 
-  const sidebar = document.getElementById('sidebar');
-  const toggleBtn = document.getElementById('toggle-btn');
-  const navMoviesBtn = document.getElementById('nav-movies');
-  const navSeriesBtn = document.getElementById('nav-series');
-  const languageButtons = document.querySelectorAll('.language-btn');
-  const searchInput = document.getElementById('search');
-  const moviesContainer = document.getElementById('movies-container');
-  const errorMessageEl = document.getElementById('error-message');
-  const movieCategoryTabs = document.querySelectorAll('.movie-category-btn');
-  const currentCategoryTitle = document.getElementById('current-category-title');
-  const listView = document.getElementById('list-view');
-  const detailView = document.getElementById('detail-view');
-  const sidebarCloseBtn = document.getElementById('sidebar-close-btn');
-  const searchContainer = document.getElementById('search-container');
+const sidebar = document.getElementById('sidebar');
+// ... rest of your code
+  
+let currentCategory = 'newReleases';
+let currentLanguage = 'all';
+let moviesMinimal = [];
+let seriesMinimal = [];
+let moviesEnriched = [];
+let seriesEnriched = [];
 
-  let currentCategory = 'newReleases';
-  let currentLanguage = 'all';
-  let moviesMinimal = [];
-  let moviesEnriched = [];
-
-  // Toggle sidebar for mobile
-  toggleBtn.addEventListener('click', () => {
-    sidebar.classList.toggle('show');
-    toggleBtn.classList.toggle('active');
-    let expanded = toggleBtn.getAttribute('aria-expanded') === 'true';
-    toggleBtn.setAttribute('aria-expanded', !expanded);
-  });
-
-  sidebarCloseBtn.addEventListener('click', () => {
-    sidebar.classList.remove('show');
-    toggleBtn.classList.remove('active');
-    toggleBtn.setAttribute('aria-expanded', 'false');
-  });
-
-  document.querySelector('main').addEventListener('click', () => {
-    if (sidebar.classList.contains('show') && window.innerWidth <= 480) {
-      sidebar.classList.remove('show');
-      toggleBtn.classList.remove('active');
-      toggleBtn.setAttribute('aria-expanded', 'false');
-    }
-  });
-
-  // Movies navigation handled by sidebar nav (not switching series here for this example)
-  navMoviesBtn.addEventListener('click', () => {
-    // For simplicity, we keep movies active
-  });
-  navSeriesBtn.addEventListener('click', () => {
-    alert('Series category not implemented in this demo.');
-  });
-
-  // Set language
-  function setLanguage(lang) {
-    currentLanguage = lang;
-    languageButtons.forEach(btn => {
-      btn.classList.toggle('selected', btn.dataset.lang === lang);
-    });
-    renderMoviesByCategory(currentCategory);
+// Load minimal data from JSON
+async function loadMinimalData() {
+  try {
+    const response = await fetch('movies-data.json', { cache: "no-store" });
+    if (!response.ok) throw new Error(`Failed to load movies-data.json: ${response.statusText}`);
+    const data = await response.json();
+    moviesMinimal = data.movies || [];
+    seriesMinimal = data.series || [];
+    errorMessageEl.style.display = 'none';
+  } catch (err) {
+    console.error(err);
+    errorMessageEl.textContent = 'Failed to load movie data. Please try again later.';
+    errorMessageEl.style.display = 'block';
   }
-  languageButtons.forEach(btn => btn.addEventListener('click', () => setLanguage(btn.dataset.lang)));
+}
 
-  // Fetch movie details from OMDb API by title
-  async function fetchMovieDetails(title) {
-    const url = `https://www.omdbapi.com/?apikey=${OMDB_API_KEY}&t=${encodeURIComponent(title)}&plot=short`;
-    try {
-      const response = await fetch(url);
-      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-      const data = await response.json();
-      if (data.Response === "False") throw new Error(`Not found: ${title}`);
-      return {
-        title: data.Title || title,
-        genre: data.Genre || 'Unknown',
-        description: data.Plot || 'No description available.',
-        poster: (data.Poster && data.Poster !== 'N/A') ? data.Poster : 'https://via.placeholder.com/180x270?text=No+Image',
-      };
-    } catch (error) {
-      console.warn('Fetch failed for', title, error);
-      return {
-        title,
-        genre: 'Unknown',
-        description: 'No description available.',
-        poster: 'https://via.placeholder.com/180x270?text=No+Image',
-      };
-    }
-  }
-
-  // Load minimal data from JSON
-  async function loadMinimalMovies() {
-    try {
-      const response = await fetch('movies-data.json', { cache: "no-store" });
-      if (!response.ok) throw new Error(`Failed to load movies-data.json: ${response.statusText}`);
-      const data = await response.json();
-      moviesMinimal = data.movies || [];
-      errorMessageEl.style.display = 'none';
-    } catch (err) {
-      console.error(err);
-      errorMessageEl.textContent = 'Failed to load movie data. Please try again later.';
-      errorMessageEl.style.display = 'block';
-    }
-  }
-
-  // Enrich movies by fetching details for each title
-  async function enrichMovies() {
-    const enriched = [];
-    for (const movie of moviesMinimal) {
-      const details = await fetchMovieDetails(movie.title);
-      enriched.push({
-        title: details.title,
-        genre: details.genre,
-        description: details.description,
-        poster: details.poster,
-        downloadUrl: movie.downloadUrl,
-        language: (movie.language || 'all').toLowerCase(),
-        category: (movie.category || 'all')
-      });
-    }
-    moviesEnriched = enriched;
-  }
-
-  // Filter movies by category, language and search query
-  function filterMovies(category, lang, query) {
-    let filtered = moviesEnriched;
-    if (category && category !== 'all') filtered = filtered.filter(m => m.category === category);
-    if (lang && lang !== 'all') filtered = filtered.filter(m => m.language === lang);
-    if (query) {
-      const q = query.toLowerCase();
-      filtered = filtered.filter(m =>
-        m.title.toLowerCase().includes(q) ||
-        m.genre.toLowerCase().includes(q) ||
-        m.description.toLowerCase().includes(q)
-      );
-    }
-    return filtered;
-  }
-
-  // Display movie cards list
-  function displayMovieList(movies) {
-    moviesContainer.innerHTML = '';
-    if (movies.length === 0) {
-      moviesContainer.innerHTML = '<p class="no-items-message">No items found.</p>';
-      return;
-    }
-    movies.forEach(movie => {
-      const card = document.createElement('div');
-      card.className = 'movie-card';
-      card.tabIndex = 0;
-      card.innerHTML = `
-        <img src="${movie.poster}" alt="Poster of movie ${movie.title}" class="poster" loading="lazy" />
-        <div class="movie-info">
-          <h3 class="movie-title">${movie.title}</h3>
-          <div class="movie-genre">${movie.genre}</div>
-          <p class="movie-description">${movie.description}</p>
-          <a href="${movie.downloadUrl}" class="download-btn" download="${movie.title.replace(/\s+/g, '_').toLowerCase()}.mp4" aria-label="Download ${movie.title}">Download</a>
-        </div>
-      `;
-      card.onclick = () => showMovieDetail(movie);
-      moviesContainer.appendChild(card);
+// Enrich movies and series by fetching details for each title
+async function enrichData() {
+  const enrichedMovies = [];
+  for (const movie of moviesMinimal) {
+    const details = await fetchMovieDetails(movie.title);
+    enrichedMovies.push({
+      title: details.title,
+      genre: details.genre,
+      description: details.description,
+      poster: details.poster,
+      downloadUrl: movie.downloadUrl,
+      language: (movie.language || 'all').toLowerCase(),
+      category: (movie.category || 'all')
     });
   }
+  moviesEnriched = enrichedMovies;
 
-  // Show detail view for a movie and hide list view
-  function showMovieDetail(movie) {
-    listView.style.display = 'none';
-    detailView.style.display = 'flex';
-    detailView.innerHTML = `
-      <img src="${movie.poster}" alt="Poster of movie ${movie.title}" class="detail-poster" />
-      <h2>${movie.title}</h2>
-      <div class="detail-genre">${movie.genre}</div>
-      <div class="detail-description">${movie.description}</div>
-      <a href="${movie.downloadUrl}" class="detail-download-btn" download="${movie.title.replace(/\s+/g, '_').toLowerCase()}.mp4" aria-label="Download ${movie.title}">Download</a>
-      <button class="back-button" aria-label="Back to list">Back</button>
-    `;
-    detailView.querySelector('.back-button').addEventListener('click', () => {
-      detailView.style.display = 'none';
-      listView.style.display = '';
-      searchInput.focus();
+  const enrichedSeries = [];
+  for (const series of seriesMinimal) {
+    const details = await fetchMovieDetails(series.title);
+    enrichedSeries.push({
+      title: details.title,
+      genre: details.genre,
+      description: details.description,
+      poster: details.poster,
+      downloadUrl: series.downloadUrl,
+      language: (series.language || 'all').toLowerCase(),
+      category: (series.category || 'all')
     });
-    detailView.focus();
   }
+  seriesEnriched = enrichedSeries;
+}
 
-  // Render movies for given category considering current language and search
-  function renderMoviesByCategory(category) {
-    currentCategory = category;
-    // Update category tab UI
-    movieCategoryTabs.forEach(btn => {
-      btn.classList.toggle('selected', btn.dataset.category === category);
-    });
-    currentCategoryTitle.textContent = movieCategoryTabs.find(btn => btn.dataset.category === category)?.textContent || 'Movies';
-    // Filter and display
-    const filteredMovies = filterMovies(currentCategory, currentLanguage, searchInput.value.trim());
-    displayMovieList(filteredMovies);
+// Filter movies and series by category, language and search query
+function filterData(category, lang, query) {
+  let filtered = [];
+  if (currentCategory === 'movies') {
+    filtered = moviesEnriched;
+  } else {
+    filtered = seriesEnriched;
   }
+  
+  if (category && category !== 'all') filtered = filtered.filter(m => m.category === category);
+  if (lang && lang !== 'all') filtered = filtered.filter(m => m.language === lang);
+  if (query) {
+    const q = query.toLowerCase();
+    filtered = filtered.filter(m =>
+      m.title.toLowerCase().includes(q) ||
+      m.genre.toLowerCase().includes(q) ||
+      m.description.toLowerCase().includes(q)
+    );
+  }
+  return filtered;
+}
 
-  // Movie category tab click events
+// Update the navigation for movies and series
+navMoviesBtn.addEventListener('click', () => {
+  currentCategory = 'movies';
+  renderMoviesByCategory(currentCategory);
+});
+
+navSeriesBtn.addEventListener('click', () => {
+  currentCategory = 'series';
+  renderMoviesByCategory(currentCategory);
+});
+
+// Render movies or series for the given category
+function renderMoviesByCategory(category) {
+  currentCategory = category;
   movieCategoryTabs.forEach(btn => {
-    btn.addEventListener('click', () => {
-      renderMoviesByCategory(btn.dataset.category);
-    });
+    btn.classList.toggle('selected', btn.dataset.category === category);
   });
+  currentCategoryTitle.textContent = category.charAt(0).toUpperCase() + category.slice(1);
+  
+  const filteredData = filterData(currentCategory, currentLanguage, searchInput.value.trim());
+  displayMovieList(filteredData);
+}
 
-  // Search input event for live filtering
-  searchInput.addEventListener('input', () => {
-    renderMoviesByCategory(currentCategory);
-  });
+// Initialize app
+async function init() {
+  await loadMinimalData();
+  await enrichData();
+  renderMoviesByCategory(currentCategory);
+}
 
-  // Initialize app
-  async function init() {
-    await loadMinimalMovies();
-    await enrichMovies();
-    renderMoviesByCategory(currentCategory);
-  }
+init();
 
-  init();
+  
 </script>
 
 </body>
