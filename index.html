@@ -371,7 +371,126 @@
     transform: scale(1.06);
     box-shadow: 0 6px 18px #ff1a1aee;
   }
-  /* Responsive adjustments */
+  
+  /* Detail view styles */
+  #detail-view {
+    max-width: 720px;
+    margin: 0 auto;
+    background: #222;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px #ff3c3caa;
+    padding: 20px 24px;
+    color: #eee;
+    user-select: text;
+    display: none;
+    flex-direction: column;
+    outline: none;
+  }
+  #detail-view .detail-poster {
+    width: 100%;
+    max-height: 400px;
+    object-fit: contain;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    user-select: none;
+  }
+  #detail-view h2 {
+    font-size: 2rem;
+    font-weight: 900;
+    margin: 0 0 12px;
+    color: #ff3c3c;
+  }
+  #detail-view .detail-genre {
+    font-size: 1.1rem;
+    font-style: italic;
+    color: #bbb;
+    margin-bottom: 16px;
+  }
+  #detail-view .detail-description {
+    font-size: 1.1rem;
+    line-height: 1.4;
+    margin-bottom: 24px;
+    color: #ddd;
+  }
+  #detail-view .detail-download-btn {
+    background: #ff3c3c;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 14px 0;
+    font-size: 1.2rem;
+    font-weight: 900;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+    user-select: none;
+    box-shadow: 0 6px 18px #ff3c3ccc;
+    display: inline-block;
+    width: 100%;
+    max-width: 320px;
+    transition: background-color 0.3s ease, transform 0.15s ease;
+  }
+  #detail-view .detail-download-btn:hover,
+  #detail-view .detail-download-btn:focus {
+    background: #ff1a1a;
+    outline: none;
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px #ff1a1aee;
+  }
+  #detail-view .back-button {
+    margin-top: 24px;
+    background: transparent;
+    border: 2px solid #ff3c3c;
+    color: #ff3c3c;
+    font-size: 1.1rem;
+    font-weight: 700;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    display: inline-block;
+    text-align: center;
+  }
+  #detail-view .back-button:hover,
+  #detail-view .back-button:focus {
+    background: #ff3c3c;
+    color: #fff;
+    outline: none;
+  }
+  
+  /* Category tabs for movie sections */
+  #movie-category-tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    user-select: none;
+    flex-wrap: wrap;
+  }
+  #movie-category-tabs button {
+    background: transparent;
+    border: 2px solid #ff3c3c;
+    color: #ff3c3c;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    min-width: 110px;
+    text-align: center;
+  }
+  #movie-category-tabs button.selected {
+    background: #ff3c3c;
+    color: #fff;
+  }
+  #movie-category-tabs button:hover:not(.selected),
+  #movie-category-tabs button:focus:not(.selected) {
+    background: #ff5c5c;
+    color: #fff;
+    outline: none;
+  }
+
+  /* Responsive */
   @media (max-width: 900px) {
     #sidebar {
       width: 180px;
@@ -457,6 +576,10 @@
       font-size: 0.8rem;
       padding: 0.75rem 1rem;
     }
+    #detail-view {
+      max-width: 90vw;
+      padding: 16px 16px 24px;
+    }
   }
 </style>
 </head>
@@ -499,19 +622,23 @@
       </div>
       <div id="error-message" role="alert" aria-live="assertive" style="display:none;"></div>
 
-      <div id="movies-content">
+      <div id="list-view">
+        <!-- Movie category tabs -->
+        <div id="movie-category-tabs" aria-label="Movie categories">
+          <button type="button" class="movie-category-btn selected" data-category="newReleases">New Released</button>
+          <button type="button" class="movie-category-btn" data-category="mostlyWatched">Mostly Watched</button>
+          <button type="button" class="movie-category-btn" data-category="trending">Trending</button>
+          <button type="button" class="movie-category-btn" data-category="all">All Movies</button>
+        </div>
+
         <section aria-label="Movies">
-          <h2 class="section-header">Movies</h2>
+          <h2 class="section-header" id="current-category-title">New Released</h2>
           <div class="items-scroll-container" id="movies-container" tabindex="0" aria-live="polite" aria-relevant="additions removals"></div>
         </section>
       </div>
 
-      <div id="series-content" style="display:none;">
-        <section aria-label="Series">
-          <h2 class="section-header">Series</h2>
-          <div class="items-scroll-container" id="series-container" tabindex="0" aria-live="polite" aria-relevant="additions removals"></div>
-        </section>
-      </div>
+      <!-- Detail view for single movie -->
+      <div id="detail-view" tabindex="0" aria-live="polite" aria-label="Movie details"></div>
     </main>
   </div>
 
@@ -519,221 +646,222 @@
     &copy; M©
   </footer>
 
-  <script>
-    const OMDB_API_KEY = '9b3b4fa1f1d85f3d1be4c5bb88a1b2c0'; // Replace with your OMDb API key
+<script>
+  const OMDB_API_KEY = 'YOUR_OMDB_API_KEY'; // Replace with your OMDb API key
 
-    const sidebar = document.getElementById('sidebar');
-    const toggleBtn = document.getElementById('toggle-btn');
-    const navMoviesBtn = document.getElementById('nav-movies');
-    const navSeriesBtn = document.getElementById('nav-series');
-    const languageButtons = document.querySelectorAll('.language-btn');
-    const searchInput = document.getElementById('search');
-    const moviesContainer = document.getElementById('movies-container');
-    const seriesContainer = document.getElementById('series-container');
-    const errorMessageEl = document.getElementById('error-message');
-    const moviesContent = document.getElementById('movies-content');
-    const seriesContent = document.getElementById('series-content');
-    const sidebarCloseBtn = document.getElementById('sidebar-close-btn');
-    const searchContainer = document.getElementById('search-container');
+  const sidebar = document.getElementById('sidebar');
+  const toggleBtn = document.getElementById('toggle-btn');
+  const navMoviesBtn = document.getElementById('nav-movies');
+  const navSeriesBtn = document.getElementById('nav-series');
+  const languageButtons = document.querySelectorAll('.language-btn');
+  const searchInput = document.getElementById('search');
+  const moviesContainer = document.getElementById('movies-container');
+  const errorMessageEl = document.getElementById('error-message');
+  const movieCategoryTabs = document.querySelectorAll('.movie-category-btn');
+  const currentCategoryTitle = document.getElementById('current-category-title');
+  const listView = document.getElementById('list-view');
+  const detailView = document.getElementById('detail-view');
+  const sidebarCloseBtn = document.getElementById('sidebar-close-btn');
+  const searchContainer = document.getElementById('search-container');
 
-    let currentCategory = 'movies';
-    let currentLanguage = 'all';
+  let currentCategory = 'newReleases';
+  let currentLanguage = 'all';
+  let moviesMinimal = [];
+  let moviesEnriched = [];
 
-    let moviesMinimal = [];
-    let seriesMinimal = [];
-    let moviesEnriched = [];
-    let seriesEnriched = [];
+  // Toggle sidebar for mobile
+  toggleBtn.addEventListener('click', () => {
+    sidebar.classList.toggle('show');
+    toggleBtn.classList.toggle('active');
+    let expanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+    toggleBtn.setAttribute('aria-expanded', !expanded);
+  });
 
-    // Toggle sidebar for mobile
-    toggleBtn.addEventListener('click', () => {
-      sidebar.classList.toggle('show');
-      toggleBtn.classList.toggle('active');
-      let expanded = toggleBtn.getAttribute('aria-expanded') === 'true';
-      toggleBtn.setAttribute('aria-expanded', !expanded);
-    });
+  sidebarCloseBtn.addEventListener('click', () => {
+    sidebar.classList.remove('show');
+    toggleBtn.classList.remove('active');
+    toggleBtn.setAttribute('aria-expanded', 'false');
+  });
 
-    sidebarCloseBtn.addEventListener('click', () => {
+  document.querySelector('main').addEventListener('click', () => {
+    if (sidebar.classList.contains('show') && window.innerWidth <= 480) {
       sidebar.classList.remove('show');
       toggleBtn.classList.remove('active');
       toggleBtn.setAttribute('aria-expanded', 'false');
-    });
+    }
+  });
 
-    document.querySelector('main').addEventListener('click', () => {
-      if (sidebar.classList.contains('show') && window.innerWidth <= 480) {
-        sidebar.classList.remove('show');
-        toggleBtn.classList.remove('active');
-        toggleBtn.setAttribute('aria-expanded', 'false');
-      }
-    });
+  // Movies navigation handled by sidebar nav (not switching series here for this example)
+  navMoviesBtn.addEventListener('click', () => {
+    // For simplicity, we keep movies active
+  });
+  navSeriesBtn.addEventListener('click', () => {
+    alert('Series category not implemented in this demo.');
+  });
 
-    // Category switching
-    function switchCategory(cat) {
-      if (currentCategory === cat) return;
-      currentCategory = cat;
-      searchInput.value = '';
-      if (cat === 'movies') {
-        moviesContent.style.display = '';
-        seriesContent.style.display = 'none';
-        navMoviesBtn.classList.add('selected');
-        navMoviesBtn.setAttribute('aria-current', 'page');
-        navSeriesBtn.classList.remove('selected');
-        navSeriesBtn.removeAttribute('aria-current');
-      } else {
-        moviesContent.style.display = 'none';
-        seriesContent.style.display = '';
-        navSeriesBtn.classList.add('selected');
-        navSeriesBtn.setAttribute('aria-current', 'page');
-        navMoviesBtn.classList.remove('selected');
-        navMoviesBtn.removeAttribute('aria-current');
-      }
-      currentLanguage = 'all';
-      languageButtons.forEach(btn => btn.classList.toggle('selected', btn.dataset.lang === 'all'));
+  // Set language
+  function setLanguage(lang) {
+    currentLanguage = lang;
+    languageButtons.forEach(btn => {
+      btn.classList.toggle('selected', btn.dataset.lang === lang);
+    });
+    renderMoviesByCategory(currentCategory);
+  }
+  languageButtons.forEach(btn => btn.addEventListener('click', () => setLanguage(btn.dataset.lang)));
+
+  // Fetch movie details from OMDb API by title
+  async function fetchMovieDetails(title) {
+    const url = `https://www.omdbapi.com/?apikey=${OMDB_API_KEY}&t=${encodeURIComponent(title)}&plot=short`;
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+      const data = await response.json();
+      if (data.Response === "False") throw new Error(`Not found: ${title}`);
+      return {
+        title: data.Title || title,
+        genre: data.Genre || 'Unknown',
+        description: data.Plot || 'No description available.',
+        poster: (data.Poster && data.Poster !== 'N/A') ? data.Poster : 'https://via.placeholder.com/180x270?text=No+Image',
+      };
+    } catch (error) {
+      console.warn('Fetch failed for', title, error);
+      return {
+        title,
+        genre: 'Unknown',
+        description: 'No description available.',
+        poster: 'https://via.placeholder.com/180x270?text=No+Image',
+      };
+    }
+  }
+
+  // Load minimal data from JSON
+  async function loadMinimalMovies() {
+    try {
+      const response = await fetch('movies-data.json', { cache: "no-store" });
+      if (!response.ok) throw new Error(`Failed to load movies-data.json: ${response.statusText}`);
+      const data = await response.json();
+      moviesMinimal = data.movies || [];
       errorMessageEl.style.display = 'none';
-      searchContainer.style.display = '';
-      searchInput.placeholder = currentCategory === 'movies' ? 'Search movies...' : 'Search series...';
-      renderAll();
+    } catch (err) {
+      console.error(err);
+      errorMessageEl.textContent = 'Failed to load movie data. Please try again later.';
+      errorMessageEl.style.display = 'block';
     }
-    navMoviesBtn.addEventListener('click', () => switchCategory('movies'));
-    navSeriesBtn.addEventListener('click', () => switchCategory('series'));
+  }
 
-    // Language selection
-    function setLanguage(lang) {
-      currentLanguage = lang;
-      languageButtons.forEach(btn => {
-        btn.classList.toggle('selected', btn.dataset.lang === lang);
-      });
-      renderAll();
-    }
-    languageButtons.forEach(btn => btn.addEventListener('click', () => setLanguage(btn.dataset.lang)));
-
-    // Fetch movie or series details from OMDb API by title
-    async function fetchItemDetails(title, type = 'movie') {
-      // type param optional for future extension (movie or series)
-      const url = `https://www.omdbapi.com/?apikey=${OMDB_API_KEY}&t=${encodeURIComponent(title)}&type=${type}&plot=short`;
-      try {
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-        const data = await response.json();
-        if (data.Response === "False") throw new Error(`Not found: ${title}`);
-        return {
-          title: data.Title || title,
-          genre: data.Genre || 'Unknown',
-          description: data.Plot || 'No description available.',
-          poster: (data.Poster && data.Poster !== 'N/A') ? data.Poster : 'https://via.placeholder.com/180x270?text=No+Image',
-        };
-      } catch (error) {
-        console.warn('Fetch failed for', title, error);
-        return {
-          title,
-          genre: 'Unknown',
-          description: 'No description available.',
-          poster: 'https://via.placeholder.com/180x270?text=No+Image',
-        };
-      }
-    }
-
-    // Load minimal JSON data from 'movies-data.json'
-    async function loadDataMinimal() {
-      try {
-        const response = await fetch('movies-data.json', { cache: "no-store" });
-        if (!response.ok) throw new Error(`Failed to load movies-data.json: ${response.statusText}`);
-        const json = await response.json();
-        moviesMinimal = json.movies || [];
-        seriesMinimal = json.series || [];
-        errorMessageEl.style.display = 'none';
-      } catch (err) {
-        console.error(err);
-        errorMessageEl.textContent = 'Failed to load data. Please try again later.';
-        errorMessageEl.style.display = 'block';
-      }
-    }
-
-    // Enrich items array (movies or series)
-    async function enrichItems(minimalArray, type = 'movie') {
-      const enriched = [];
-      for (const item of minimalArray) {
-        const details = await fetchItemDetails(item.title, type);
-        enriched.push({
-          title: details.title,
-          genre: details.genre,
-          description: details.description,
-          poster: details.poster,
-          downloadUrl: item.downloadUrl,
-          language: (item.language || 'all').toLowerCase()
-        });
-      }
-      return enriched;
-    }
-
-    // Filter items by query and language
-    function filterItems(items, query, lang) {
-      let filtered = items;
-      if (query) {
-        const q = query.toLowerCase();
-        filtered = filtered.filter(item =>
-          item.title.toLowerCase().includes(q) ||
-          item.genre.toLowerCase().includes(q) ||
-          item.description.toLowerCase().includes(q)
-        );
-      }
-      if (lang && lang !== 'all') {
-        filtered = filtered.filter(item => item.language === lang);
-      }
-      return filtered;
-    }
-
-    // Display items in the container
-    function displayItems(items, container, isSeries = false) {
-      container.innerHTML = '';
-      if (items.length === 0) {
-        container.innerHTML = '<p class="no-items-message">No items found.</p>';
-        return;
-      }
-      items.forEach(item => {
-        const card = document.createElement('div');
-        card.className = isSeries ? 'series-card' : 'movie-card';
-        card.tabIndex = 0;
-        card.innerHTML = `
-          <img src="${item.poster}" alt="${isSeries ? 'Poster of series ' : 'Poster of movie '}${item.title}" class="poster" loading="lazy" />
-          <div class="${isSeries ? 'series-info' : 'movie-info'}">
-            <h3 class="${isSeries ? 'series-title' : 'movie-title'}">${item.title}</h3>
-            <div class="${isSeries ? 'series-genre' : 'movie-genre'}">${item.genre}</div>
-            <p class="${isSeries ? 'series-description' : 'movie-description'}">${item.description}</p>
-            <a href="${item.downloadUrl}" class="download-btn" download="${item.title.replace(/\s+/g, '_').toLowerCase()}.mp4" aria-label="Download ${item.title}">Download</a>
-          </div>
-        `;
-        container.appendChild(card);
+  // Enrich movies by fetching details for each title
+  async function enrichMovies() {
+    const enriched = [];
+    for (const movie of moviesMinimal) {
+      const details = await fetchMovieDetails(movie.title);
+      enriched.push({
+        title: details.title,
+        genre: details.genre,
+        description: details.description,
+        poster: details.poster,
+        downloadUrl: movie.downloadUrl,
+        language: (movie.language || 'all').toLowerCase(),
+        category: (movie.category || 'all')
       });
     }
+    moviesEnriched = enriched;
+  }
 
-    // Render all items based on current category, language and search query
-    function renderAll() {
-      const query = searchInput.value.trim();
-      if (currentCategory === 'movies') {
-        moviesContent.style.display = '';
-        seriesContent.style.display = 'none';
-        const filteredMovies = filterItems(moviesEnriched, query, currentLanguage);
-        displayItems(filteredMovies, moviesContainer);
-      } else {
-        moviesContent.style.display = 'none';
-        seriesContent.style.display = '';
-        const filteredSeries = filterItems(seriesEnriched, query, currentLanguage);
-        displayItems(filteredSeries, seriesContainer, true);
-      }
+  // Filter movies by category, language and search query
+  function filterMovies(category, lang, query) {
+    let filtered = moviesEnriched;
+    if (category && category !== 'all') filtered = filtered.filter(m => m.category === category);
+    if (lang && lang !== 'all') filtered = filtered.filter(m => m.language === lang);
+    if (query) {
+      const q = query.toLowerCase();
+      filtered = filtered.filter(m =>
+        m.title.toLowerCase().includes(q) ||
+        m.genre.toLowerCase().includes(q) ||
+        m.description.toLowerCase().includes(q)
+      );
     }
+    return filtered;
+  }
 
-    searchInput.addEventListener('input', renderAll);
-
-    // Initialize app: load minimal data, enrich, and render default category
-    async function init() {
-      await loadDataMinimal();
-      moviesEnriched = await enrichItems(moviesMinimal, 'movie');
-      seriesEnriched = await enrichItems(seriesMinimal, 'series');
-      renderAll();
+  // Display movie cards list
+  function displayMovieList(movies) {
+    moviesContainer.innerHTML = '';
+    if (movies.length === 0) {
+      moviesContainer.innerHTML = '<p class="no-items-message">No items found.</p>';
+      return;
     }
+    movies.forEach(movie => {
+      const card = document.createElement('div');
+      card.className = 'movie-card';
+      card.tabIndex = 0;
+      card.innerHTML = `
+        <img src="${movie.poster}" alt="Poster of movie ${movie.title}" class="poster" loading="lazy" />
+        <div class="movie-info">
+          <h3 class="movie-title">${movie.title}</h3>
+          <div class="movie-genre">${movie.genre}</div>
+          <p class="movie-description">${movie.description}</p>
+          <a href="${movie.downloadUrl}" class="download-btn" download="${movie.title.replace(/\s+/g, '_').toLowerCase()}.mp4" aria-label="Download ${movie.title}">Download</a>
+        </div>
+      `;
+      card.onclick = () => showMovieDetail(movie);
+      moviesContainer.appendChild(card);
+    });
+  }
 
-    init();
-  </script>
+  // Show detail view for a movie and hide list view
+  function showMovieDetail(movie) {
+    listView.style.display = 'none';
+    detailView.style.display = 'flex';
+    detailView.innerHTML = `
+      <img src="${movie.poster}" alt="Poster of movie ${movie.title}" class="detail-poster" />
+      <h2>${movie.title}</h2>
+      <div class="detail-genre">${movie.genre}</div>
+      <div class="detail-description">${movie.description}</div>
+      <a href="${movie.downloadUrl}" class="detail-download-btn" download="${movie.title.replace(/\s+/g, '_').toLowerCase()}.mp4" aria-label="Download ${movie.title}">Download</a>
+      <button class="back-button" aria-label="Back to list">Back</button>
+    `;
+    detailView.querySelector('.back-button').addEventListener('click', () => {
+      detailView.style.display = 'none';
+      listView.style.display = '';
+      searchInput.focus();
+    });
+    detailView.focus();
+  }
+
+  // Render movies for given category considering current language and search
+  function renderMoviesByCategory(category) {
+    currentCategory = category;
+    // Update category tab UI
+    movieCategoryTabs.forEach(btn => {
+      btn.classList.toggle('selected', btn.dataset.category === category);
+    });
+    currentCategoryTitle.textContent = movieCategoryTabs.find(btn => btn.dataset.category === category)?.textContent || 'Movies';
+    // Filter and display
+    const filteredMovies = filterMovies(currentCategory, currentLanguage, searchInput.value.trim());
+    displayMovieList(filteredMovies);
+  }
+
+  // Movie category tab click events
+  movieCategoryTabs.forEach(btn => {
+    btn.addEventListener('click', () => {
+      renderMoviesByCategory(btn.dataset.category);
+    });
+  });
+
+  // Search input event for live filtering
+  searchInput.addEventListener('input', () => {
+    renderMoviesByCategory(currentCategory);
+  });
+
+  // Initialize app
+  async function init() {
+    await loadMinimalMovies();
+    await enrichMovies();
+    renderMoviesByCategory(currentCategory);
+  }
+
+  init();
+</script>
+
 </body>
 </html>
-
