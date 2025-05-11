@@ -6,352 +6,346 @@
       "language": "english",
       "category": "newReleases"
     },
-  {
-    "title": "Badal - The Manifesto",
-    "downloadUrl": "https://example.com/badal_the_manifesto.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Chappakuthu",
-    "downloadUrl": "https://example.com/chappakuthu.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "L",
-    "downloadUrl": "https://example.com/l.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Aavesham",
-    "downloadUrl": "https://example.com/aavesham.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Varshangalkku Shesham",
-    "downloadUrl": "https://example.com/varshangalkku_shesham.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Jai Ganesh",
-    "downloadUrl": "https://example.com/jai_ganesh.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Chaar Chor",
-    "downloadUrl": "https://example.com/chaar_chor.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Udan Adi Mangalyam",
-    "downloadUrl": "https://example.com/udan_adi_mangalyam.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Thurathi Malayile Thiruthukal",
-    "downloadUrl": "https://example.com/thurathi_malayile_thiruthukal.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Anjaam Vedam",
-    "downloadUrl": "https://example.com/anjaam_vedam.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Panchavalsara Padhathi",
-    "downloadUrl": "https://example.com/panchavalsara_padhathi.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Pavi Caretaker",
-    "downloadUrl": "https://example.com/pavi_caretaker.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Malayalee From India",
-    "downloadUrl": "https://example.com/malayalee_from_india.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Cadburys",
-    "downloadUrl": "https://example.com/cadburys.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Nadikar",
-    "downloadUrl": "https://example.com/nadikar.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Poka",
-    "downloadUrl": "https://example.com/poka.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Aaro",
-    "downloadUrl": "https://example.com/aaro.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Marivillin Gopurangal",
-    "downloadUrl": "https://example.com/marivillin_gopurangal.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Perumani",
-    "downloadUrl": "https://example.com/perumani.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Sweet Chakkara Umma",
-    "downloadUrl": "https://example.com/sweet_chakkara_umma.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Guruvayoor Ambalanadayil",
-    "downloadUrl": "https://example.com/guruvayoor_ambalanadayil.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Kattis Gang",
-    "downloadUrl": "https://example.com/kattis_gang.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Sureshanteyum Sumalathayudeyum Hrudayahariyaya Pranayakadha",
-    "downloadUrl": "https://example.com/sureshanteyum_sumalathayudeyum_hrudayahariyaya_pranayakadha.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Gu",
-    "downloadUrl": "https://example.com/gu.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Guardian Angel",
-    "downloadUrl": "https://example.com/guardian_angel.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "CID Ramachandran Retd. SI",
-    "downloadUrl": "https://example.com/cid_ramachandran_retd_si.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Turbo",
-    "downloadUrl": "https://example.com/turbo.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Mandakini",
-    "downloadUrl": "https://example.com/mandakini.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Thalavan",
-    "downloadUrl": "https://example.com/thalavan.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Kudumbasthreeyum Kunjadum",
-    "downloadUrl": "https://example.com/kudumbasthreeyum_kunjadum.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Ishtaragam",
-    "downloadUrl": "https://example.com/ishtaragam.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Once Upon a Time in Kochi",
-    "downloadUrl": "https://example.com/once_upon_a_time_in_kochi.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Ponmbalai Orumai",
-    "downloadUrl": "https://example.com/ponmbalai_orumai.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "The Mistaker Who",
-    "downloadUrl": "https://example.com/the_mistaker_who.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Swakaryam Sambhava Bahulam",
-    "downloadUrl": "https://example.com/swakaryam_sambhava_bahulam.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Little Hearts",
-    "downloadUrl": "https://example.com/little_hearts.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Abhirami",
-    "downloadUrl": "https://example.com/abhirami.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Golam",
-    "downloadUrl": "https://example.com/golam.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Jamalinte Punchiri",
-    "downloadUrl": "https://example.com/jamalinte_punchiri.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Mayamma",
-    "downloadUrl": "https://example.com/mayamma.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Sree Muthappan",
-    "downloadUrl": "https://example.com/sree_muthappan.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Pullu Rising",
-    "downloadUrl": "https://example.com/pullu_rising.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "DNA",
-    "downloadUrl": "https://example.com/dna.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Grr",
-    "downloadUrl": "https://example.com/grr.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Murivu",
-    "downloadUrl": "https://example.com/murivu.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Oru Kadha Parayum Neram",
-    "downloadUrl": "https://example.com/oru_kadha_parayum_neram.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Ullozhukku",
-    "downloadUrl": "https://example.com/ullozhukku.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Nadanna Sambhavam",
-    "downloadUrl": "https://example.com/nadanna_sambhavam.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Matthu",
-    "downloadUrl": "https://example.com/matthu.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Monica: Oru AI Story",
-    "downloadUrl": "https://example.com/monica_oru_ai_story.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Uncleum Kuttyolum",
-    "downloadUrl": "https://example.com/uncleum_kuttyolum.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Gaganachari",
-    "downloadUrl": "https://example.com/gaganachari.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Swargathile Katturumbu",
-    "downloadUrl": "https://example.com/swargathile_katturumbu.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Big Ben",
-    "downloadUrl": "https://example.com/big_ben.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Kunddala Puranam",
-    "downloadUrl": "https://example.com/kunddala_puranam.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Paradise",
-    "downloadUrl": "https://example.com/paradise.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
-  {
-    "title": "Pattaapakal",
-    "downloadUrl": "https://example.com/pattaapakal.mp4",
-    "language": "malayalam",
-    "category": "mostlyWatched"
-  },
     {
-      "title": "Inception",
-      "downloadUrl": "https://example.com/inception.mp4",
-      "language": "english",
+      "title": "Badal - The Manifesto",
+      "downloadUrl": "https://example.com/badal_the_manifesto.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Chappakuthu",
+      "downloadUrl": "https://example.com/chappakuthu.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "L",
+      "downloadUrl": "https://example.com/l.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Aavesham",
+      "downloadUrl": "https://example.com/aavesham.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Varshangalkku Shesham",
+      "downloadUrl": "https://example.com/varshangalkku_shesham.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Jai Ganesh",
+      "downloadUrl": "https://example.com/jai_ganesh.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Chaar Chor",
+      "downloadUrl": "https://example.com/chaar_chor.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Udan Adi Mangalyam",
+      "downloadUrl": "https://example.com/udan_adi_mangalyam.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Thurathi Malayile Thiruthukal",
+      "downloadUrl": "https://example.com/thurathi_malayile_thiruthukal.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Anjaam Vedam",
+      "downloadUrl": "https://example.com/anjaam_vedam.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Panchavalsara Padhathi",
+      "downloadUrl": "https://example.com/panchavalsara_padhathi.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Pavi Caretaker",
+      "downloadUrl": "https://example.com/pavi_caretaker.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Malayalee From India",
+      "downloadUrl": "https://example.com/malayalee_from_india.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Cadburys",
+      "downloadUrl": "https://example.com/cadburys.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Nadikar",
+      "downloadUrl": "https://example.com/nadikar.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Poka",
+      "downloadUrl": "https://example.com/poka.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Aaro",
+      "downloadUrl": "https://example.com/aaro.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Marivillin Gopurangal",
+      "downloadUrl": "https://example.com/marivillin_gopurangal.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Perumani",
+      "downloadUrl": "https://example.com/perumani.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Sweet Chakkara Umma",
+      "downloadUrl": "https://example.com/sweet_chakkara_umma.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Guruvayoor Ambalanadayil",
+      "downloadUrl": "https://example.com/guruvayoor_ambalanadayil.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Kattis Gang",
+      "downloadUrl": "https://example.com/kattis_gang.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Sureshanteyum Sumalathayudeyum Hrudayahariyaya Pranayakadha",
+      "downloadUrl": "https://example.com/sureshanteyum_sumalathayudeyum_hrudayahariyaya_pranayakadha.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Gu",
+      "downloadUrl": "https://example.com/gu.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Guardian Angel",
+      "downloadUrl": "https://example.com/guardian_angel.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "CID Ramachandran Retd. SI",
+      "downloadUrl": "https://example.com/cid_ramachandran_retd_si.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Turbo",
+      "downloadUrl": "https://example.com/turbo.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Mandakini",
+      "downloadUrl": "https://example.com/mandakini.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Thalavan",
+      "downloadUrl": "https://example.com/thalavan.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Kudumbasthreeyum Kunjadum",
+      "downloadUrl": "https://example.com/kudumbasthreeyum_kunjadum.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Ishtaragam",
+      "downloadUrl": "https://example.com/ishtaragam.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Once Upon a Time in Kochi",
+      "downloadUrl": "https://example.com/once_upon_a_time_in_kochi.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Ponmbalai Orumai",
+      "downloadUrl": "https://example.com/ponmbalai_orumai.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "The Mistaker Who",
+      "downloadUrl": "https://example.com/the_mistaker_who.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Swakaryam Sambhava Bahulam",
+      "downloadUrl": "https://example.com/swakaryam_sambhava_bahulam.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Little Hearts",
+      "downloadUrl": "https://example.com/little_hearts.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Abhirami",
+      "downloadUrl": "https://example.com/abhirami.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Golam",
+      "downloadUrl": "https://example.com/golam.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Jamalinte Punchiri",
+      "downloadUrl": "https://example.com/jamalinte_punchiri.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Mayamma",
+      "downloadUrl": "https://example.com/mayamma.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Sree Muthappan",
+      "downloadUrl": "https://example.com/sree_muthappan.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Pullu Rising",
+      "downloadUrl": "https://example.com/pullu_rising.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "DNA",
+      "downloadUrl": "https://example.com/dna.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Grr",
+      "downloadUrl": "https://example.com/grr.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Murivu",
+      "downloadUrl": "https://example.com/murivu.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Oru Kadha Parayum Neram",
+      "downloadUrl": "https://example.com/oru_kadha_parayum_neram.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Ullozhukku",
+      "downloadUrl": "https://example.com/ullozhukku.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Nadanna Sambhavam",
+      "downloadUrl": "https://example.com/nadanna_sambhavam.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Matthu",
+      "downloadUrl": "https://example.com/matthu.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Monica: Oru AI Story",
+      "downloadUrl": "https://example.com/monica_oru_ai_story.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Uncleum Kuttyolum",
+      "downloadUrl": "https://example.com/uncleum_kuttyolum.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Gaganachari",
+      "downloadUrl": "https://example.com/gaganachari.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Swargathile Katturumbu",
+      "downloadUrl": "https://example.com/swargathile_katturumbu.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Big Ben",
+      "downloadUrl": "https://example.com/big_ben.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Kunddala Puranam",
+      "downloadUrl": "https://example.com/kunddala_puranam.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Paradise",
+      "downloadUrl": "https://example.com/paradise.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Pattaapakal",
+      "downloadUrl": "https://example.com/pattaapakal.mp4",
+      "language": "malayalam",
       "category": "mostlyWatched"
     },
     {
@@ -397,25 +391,108 @@
       "category": "mostlyWatched"
     }
   ],
-  
   "series": [
     {
-      "title": "Stranger Things",
-      "downloadUrl": "https://example.com/strangerthings.mp4",
+      "title": "Loki",
+      "downloadUrl": "https://example.com/loki.mp4",
       "language": "english",
-      "category": "newReleases"
+      "category": "trending"
     },
     {
-      "title": "The Crown",
-      "downloadUrl": "https://example.com/thecrown.mp4",
-      "language": "english",
+      "title": "Asur",
+      "downloadUrl": "https://example.com/asur.mp4",
+      "language": "hindi",
+      "category": "trending"
+    },
+    {
+      "title": "The Family Man",
+      "downloadUrl": "https://example.com/familyman.mp4",
+      "language": "hindi",
       "category": "mostlyWatched"
+    },
+    {
+      "title": "Scam 1992",
+      "downloadUrl": "https://example.com/scam1992.mp4",
+      "language": "hindi",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Farzi",
+      "downloadUrl": "https://example.com/farzi.mp4",
+      "language": "hindi",
+      "category": "newReleases"
     },
     {
       "title": "Money Heist",
       "downloadUrl": "https://example.com/moneyheist.mp4",
       "language": "spanish",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Stranger Things",
+      "downloadUrl": "https://example.com/strangerthings.mp4",
+      "language": "english",
       "category": "trending"
+    },
+    {
+      "title": "Mirzapur",
+      "downloadUrl": "https://example.com/mirzapur.mp4",
+      "language": "hindi",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Panchayat",
+      "downloadUrl": "https://example.com/panchayat.mp4",
+      "language": "hindi",
+      "category": "newReleases"
+    },
+    {
+      "title": "The Boys",
+      "downloadUrl": "https://example.com/theboys.mp4",
+      "language": "english",
+      "category": "trending"
+    },
+    {
+      "title": "All of Us Are Dead",
+      "downloadUrl": "https://example.com/allofusaredead.mp4",
+      "language": "korean",
+      "category": "trending"
+    },
+    {
+      "title": "Delhi Crime",
+      "downloadUrl": "https://example.com/delhicrime.mp4",
+      "language": "hindi",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "The Night Manager",
+      "downloadUrl": "https://example.com/thenightmanager.mp4",
+      "language": "hindi",
+      "category": "trending"
+    },
+    {
+      "title": "Squid Game",
+      "downloadUrl": "https://example.com/squidgame.mp4",
+      "language": "korean",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Suzhal: The Vortex",
+      "downloadUrl": "https://example.com/suzhal.mp4",
+      "language": "tamil",
+      "category": "newReleases"
+    },
+    {
+      "title": "Jubilee",
+      "downloadUrl": "https://example.com/jubilee.mp4",
+      "language": "hindi",
+      "category": "newReleases"
+    },
+    {
+      "title": "Guns & Gulaabs",
+      "downloadUrl": "https://example.com/gunsandgulaabs.mp4",
+      "language": "hindi",
+      "category": "newReleases"
     }
   ]
 }
