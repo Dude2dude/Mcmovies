@@ -1,561 +1,464 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <title>M C company </title>
-  <style>
-    /* Reset and base */
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #121212;
-      color: #eee;
-      min-height: 100vh;
-      overflow-x: hidden;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-    }
-    header {
-      background: #1f1f1f;
-      padding: 1rem;
-      text-align: center;
-      position: fixed;
-      width: 100%;
-      top: 0;
-      left: 0;
-      z-index: 1002;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.7);
-      user-select: none;
-    }
-    header h1 {
-      margin: 0;
-      color: #ff3c3c;
-      font-weight: 900;
-      letter-spacing: 1.5px;
-      font-size: 1.8rem;
-    }
-    .app-container {
-      flex: 1;
-      display: flex;
-      overflow: hidden;
-      height: 100%;
-      max-height: 100vh;
-      margin-top: 60px; /* space for header */
-    }
-    /* Sidebar styles */
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>M C company</title>
+<style>
+  /* Reset and base */
+  * {box-sizing: border-box;}
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #121212;
+    color: #eee;
+    min-height: 100vh;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  header {
+    background: #1f1f1f;
+    padding: 1rem;
+    text-align: center;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1002;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.7);
+    user-select: none;
+  }
+  header h1 {
+    margin: 0;
+    color: #ff3c3c;
+    font-weight: 900;
+    letter-spacing: 1.5px;
+    font-size: 1.8rem;
+  }
+  .app-container {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+    height: 100%;
+    max-height: 100vh;
+    margin-top: 60px; /* space for header */
+  }
+  /* Sidebar styles */
+  #sidebar {
+    background: #1f1f1f;
+    width: 220px;
+    max-width: 80vw;
+    height: calc(100vh - 60px);
+    position: fixed;
+    top: 60px; /* beneath header */
+    left: 0;
+    z-index: 1001;
+    transform: translateX(0);
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 1.2rem;
+    user-select: none;
+    box-shadow: 2px 0 8px rgba(255,60,60,0.5);
+  }
+  #sidebar.hidden {
+    transform: translateX(-100%);
+  }
+  #sidebar h1 {
+    font-size: 1.6rem;
+    color: #ff3c3c;
+    margin: 0 0 1.4rem 0;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    user-select: none;
+  }
+  #sidebar nav {
+    flex-grow: 1;
+  }
+  #sidebar nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 2rem 0;
+  }
+  #sidebar nav ul li {
+    margin-bottom: 1.4rem;
+  }
+  #sidebar nav ul li button {
+    background: none;
+    border: none;
+    color: #eee;
+    font-size: 1.2rem;
+    padding: 0;
+    cursor: pointer;
+    user-select: none;
+    text-align: left;
+    width: 100%;
+    transition: color 0.3s ease;
+    font-weight: 600;
+  }
+  #sidebar nav ul li button:hover,
+  #sidebar nav ul li button.selected {
+    color: #ff5c5c;
+    outline: none;
+  }
+  #sidebar .languages {
+    border-top: 1px solid #444;
+    padding-top: 1rem;
+  }
+  #sidebar .languages h2 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    color: #ff6666;
+    font-weight: 700;
+    user-select: none;
+  }
+  #sidebar .languages ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  #sidebar .languages ul li {
+    margin-bottom: 1rem;
+  }
+  #sidebar .languages ul li button {
+    font-size: 1.05rem;
+    color: #eee;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    width: 100%;
+    text-align: left;
+    padding: 0;
+    font-weight: 600;
+    user-select: none;
+  }
+  #sidebar .languages ul li button.selected {
+    color: #ff3c3c;
+    font-weight: 900;
+    outline: none;
+  }
+  /* Close button inside sidebar */
+  #sidebar-close-btn {
+    align-self: flex-end;
+    background: transparent;
+    border: none;
+    color: #ff3c3c;
+    font-size: 1.6rem;
+    cursor: pointer;
+    padding: 0 0 0.75rem 0;
+    user-select: none;
+    transition: color 0.3s ease;
+  }
+  #sidebar-close-btn:hover,
+  #sidebar-close-btn:focus {
+    color: #ff1a1a;
+    outline: none;
+  }
+  /* Hamburger toggle button */
+  #toggle-btn {
+    display: none;
+    position: fixed;
+    top: 14px;
+    left: 14px;
+    z-index: 2003;
+    background: #ff3c3c;
+    border: none;
+    border-radius: 6px;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    box-shadow: 0 0 9px #ff3c3caa;
+    user-select: none;
+  }
+  #toggle-btn:focus {
+    outline: none;
+    box-shadow: 0 0 14px #ff3c3cff;
+  }
+  #toggle-btn div {
+    width: 22px;
+    height: 3px;
+    background: #fff;
+    margin: 5px auto;
+    border-radius: 2px;
+    transition: 0.3s;
+  }
+  /* Animate toggle button when active */
+  #toggle-btn.active div:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  #toggle-btn.active div:nth-child(2) {
+    opacity: 0;
+  }
+  #toggle-btn.active div:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+  /* Main content area */
+  main {
+    flex: 1;
+    margin-left: 220px;
+    padding: 1rem 1rem 2rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: calc(100vh - 60px);
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+    scroll-behavior: smooth;
+  }
+  main.fullwidth {
+    margin-left: 0;
+    max-width: 100%;
+  }
+  #search-container {
+    margin-bottom: 1.2rem;
+    text-align: center;
+  }
+  #search {
+    width: 100%;
+    max-width: 400px;
+    padding: 0.6rem 0.9rem;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    outline: none;
+    box-shadow: 0 0 8px #ff3c3c66;
+    background: #222;
+    color: #eee;
+    transition: box-shadow 0.3s ease;
+    font-weight: 600;
+    user-select: text;
+  }
+  #search::placeholder {
+    color: #bbb;
+    font-weight: 400;
+  }
+  #search:focus {
+    box-shadow: 0 0 14px #ff3c3ccc;
+  }
+  .section-header {
+    margin: 1.8rem 0 1rem 0.5rem;
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #ff4c4c;
+    user-select: none;
+    letter-spacing: 1.2px;
+  }
+  .items-scroll-container {
+    display: flex;
+    gap: 1.4rem;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding-bottom: 0.75rem;
+    padding-left: 0.5rem;
+    user-select: none;
+  }
+  .items-scroll-container::-webkit-scrollbar {
+    height: 10px;
+  }
+  .items-scroll-container::-webkit-scrollbar-thumb {
+    background: #ff3c3caa;
+    border-radius: 6px;
+  }
+  .items-scroll-container::-webkit-scrollbar-track {
+    background: #222;
+  }
+  .no-items-message {
+    color: #999;
+    text-align: center;
+    width: 100%;
+    user-select: none;
+    font-size: 1.1rem;
+    padding: 1rem 0;
+    font-style: italic;
+  }
+  #error-message {
+    color: #ff4c4c;
+    text-align: center;
+    padding: 1.2rem;
+    font-weight: 700;
+    user-select: none;
+    font-size: 1.1rem;
+  }
+  footer {
+    text-align: center;
+    font-size: 0.85rem;
+    padding: 0.75rem 1rem;
+    color: #555;
+    user-select: none;
+    background-color: #111;
+    flex-shrink: 0;
+  }
+  .movie-card, .series-card {
+    flex: 0 0 180px;
+    background: #222;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px #ff3c3caa;
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+  }
+  .movie-card:hover, .series-card:hover {
+    transform: scale(1.12);
+    box-shadow: 0 10px 30px #ff3c3ccc;
+    z-index: 10;
+    position: relative;
+  }
+  .poster {
+    width: 100%;
+    display: block;
+    border-bottom: 1.5px solid #ff3c3c66;
+    height: 270px;
+    object-fit: cover;
+    flex-shrink: 0;
+    user-select: none;
+    touch-action: manipulation;
+  }
+  .movie-info, .series-info {
+    padding: 1rem 1.2rem 0.8rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .movie-title, .series-title {
+    font-weight: 900;
+    font-size: 1.15rem;
+    margin: 0 0 0.4rem;
+    color: #ff5c5c;
+    user-select: text;
+  }
+  .movie-genre, .series-genre {
+    font-size: 0.85rem;
+    color: #bbb;
+    margin-bottom: 0.75rem;
+    font-style: italic;
+    user-select: text;
+  }
+  .movie-description, .series-description {
+    font-size: 0.85rem;
+    line-height: 1.3;
+    color: #ccc;
+    flex-grow: 1;
+    user-select: text;
+  }
+  .download-btn {
+    margin-top: 1rem;
+    background: #ff3c3c;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 0.6rem 0;
+    font-size: 1rem;
+    font-weight: 800;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+    user-select: none;
+    transition: background-color 0.3s ease, transform 0.15s ease;
+    display: block;
+    width: 100%;
+    box-shadow: 0 3px 8px #ff3c3ccc;
+  }
+  .download-btn:hover,
+  .download-btn:focus {
+    background: #ff1a1a;
+    outline: none;
+    transform: scale(1.06);
+    box-shadow: 0 6px 18px #ff1a1aee;
+  }
+  /* Responsive adjustments */
+  @media (max-width: 900px) {
     #sidebar {
-      background: #1f1f1f;
-      width: 220px;
-      max-width: 80vw;
-      height: calc(100vh - 60px);
-      position: fixed;
-      top: 60px; /* beneath header */
-      left: 0;
-      z-index: 1001;
-      transform: translateX(0);
-      transition: transform 0.3s ease;
-      display: flex;
-      flex-direction: column;
-      padding: 1rem 1.2rem;
-      user-select: none;
-      box-shadow: 2px 0 8px rgba(255,60,60,0.5);
+      width: 180px;
+      padding: 1rem 1rem;
     }
-    #sidebar.hidden {
-      transform: translateX(-100%);
-    }
-    #sidebar h1 {
-      font-size: 1.6rem;
-      color: #ff3c3c;
-      margin: 0 0 1.4rem 0;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-      user-select: none;
-    }
-    #sidebar nav {
-      flex-grow: 1;
-    }
-    #sidebar nav ul {
-      list-style: none;
-      padding: 0;
-      margin: 0 0 2rem 0;
-    }
-    #sidebar nav ul li {
-      margin-bottom: 1.4rem;
-    }
-    #sidebar nav ul li button {
-      background: none;
-      border: none;
-      color: #eee;
-      font-size: 1.2rem;
-      padding: 0;
-      cursor: pointer;
-      user-select: none;
-      text-align: left;
-      width: 100%;
-      transition: color 0.3s ease;
-      font-weight: 600;
-    }
-    #sidebar nav ul li button:hover,
-    #sidebar nav ul li button.selected {
-      color: #ff5c5c;
-      outline: none;
-    }
-    #sidebar .languages {
-      border-top: 1px solid #444;
-      padding-top: 1rem;
-    }
-    #sidebar .languages h2 {
-      font-size: 1.1rem;
-      margin-bottom: 1rem;
-      color: #ff6666;
-      font-weight: 700;
-      user-select: none;
-    }
-    #sidebar .languages ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    #sidebar .languages ul li {
-      margin-bottom: 1rem;
-    }
-    #sidebar .languages ul li button {
-      font-size: 1.05rem;
-      color: #eee;
-      background: none;
-      border: none;
-      cursor: pointer;
-      transition: color 0.3s ease;
-      width: 100%;
-      text-align: left;
-      padding: 0;
-      font-weight: 600;
-      user-select: none;
-    }
-    #sidebar .languages ul li button.selected {
-      color: #ff3c3c;
-      font-weight: 900;
-      outline: none;
-    }
-    /* Close button inside sidebar */
-    #sidebar-close-btn {
-      align-self: flex-end;
-      background: transparent;
-      border: none;
-      color: #ff3c3c;
-      font-size: 1.6rem;
-      cursor: pointer;
-      padding: 0 0 0.75rem 0;
-      user-select: none;
-      transition: color 0.3s ease;
-    }
-    #sidebar-close-btn:hover,
-    #sidebar-close-btn:focus {
-      color: #ff1a1a;
-      outline: none;
-    }
-    /* Hamburger toggle button */
-    #toggle-btn {
-      display: none;
-      position: fixed;
-      top: 14px;
-      left: 14px;
-      z-index: 2003;
-      background: #ff3c3c;
-      border: none;
-      border-radius: 6px;
-      width: 40px;
-      height: 40px;
-      cursor: pointer;
-      box-shadow: 0 0 9px #ff3c3caa;
-      user-select: none;
-    }
-    #toggle-btn:focus {
-      outline: none;
-      box-shadow: 0 0 14px #ff3c3cff;
-    }
-    #toggle-btn div {
-      width: 22px;
-      height: 3px;
-      background: #fff;
-      margin: 5px auto;
-      border-radius: 2px;
-      transition: 0.3s;
-    }
-    /* Animate toggle button when active */
-    #toggle-btn.active div:nth-child(1) {
-      transform: translateY(7px) rotate(45deg);
-    }
-    #toggle-btn.active div:nth-child(2) {
-      opacity: 0;
-    }
-    #toggle-btn.active div:nth-child(3) {
-      transform: translateY(-7px) rotate(-45deg);
-    }
-    /* Main content area */
     main {
-      flex: 1;
-      margin-left: 220px;
-      padding: 1rem 1rem 2rem;
-      overflow-y: auto;
-      overflow-x: hidden;
-      max-height: calc(100vh - 60px);
-      display: flex;
-      flex-direction: column;
-      user-select: none;
-      scroll-behavior: smooth;
+      margin-left: 180px;
+      max-width: calc(100vw - 180px);
+      padding: 0.8rem 1rem 1.5rem;
     }
-    main.fullwidth {
-      margin-left: 0;
-      max-width: 100%;
-    }
-    #search-container {
-      margin-bottom: 1.2rem;
-      text-align: center;
-    }
-    #search {
-      width: 100%;
-      max-width: 400px;
-      padding: 0.6rem 0.9rem;
-      border: none;
-      border-radius: 10px;
-      font-size: 1.1rem;
-      outline: none;
-      box-shadow: 0 0 8px #ff3c3c66;
-      background: #222;
-      color: #eee;
-      transition: box-shadow 0.3s ease;
-      font-weight: 600;
-      user-select: text;
-    }
-    #search::placeholder {
-      color: #bbb;
-      font-weight: 400;
-    }
-    #search:focus {
-      box-shadow: 0 0 14px #ff3c3ccc;
-    }
-    /* Section heading */
-    .section-header {
-      margin: 1.8rem 0 1rem 0.5rem;
-      font-size: 1.5rem;
-      font-weight: 900;
-      color: #ff4c4c;
-      user-select: none;
-      letter-spacing: 1.2px;
-    }
-    /* Horizontal scroll container for movies/series */
     .items-scroll-container {
-      display: flex;
-      gap: 1.4rem;
-      overflow-x: auto;
-      scroll-behavior: smooth;
-      padding-bottom: 0.75rem;
-      padding-left: 0.5rem;
-      user-select: none;
-    }
-    .items-scroll-container::-webkit-scrollbar {
-      height: 10px;
-    }
-    .items-scroll-container::-webkit-scrollbar-thumb {
-      background: #ff3c3caa;
-      border-radius: 6px;
-    }
-    .items-scroll-container::-webkit-scrollbar-track {
-      background: #222;
-    }
-    .no-scroll {
-      scroll-behavior: auto !important;
+      gap: 1rem;
+      padding-left: 0.4rem;
     }
     .movie-card, .series-card {
-      flex: 0 0 180px;
-      background: #222;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 4px 15px #ff3c3caa;
-      cursor: pointer;
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
-      display: flex;
-      flex-direction: column;
-      user-select: none;
-    }
-    .movie-card:hover, .series-card:hover {
-      transform: scale(1.12);
-      box-shadow: 0 10px 30px #ff3c3ccc;
-      z-index: 10;
-      position: relative;
+      flex: 0 0 160px;
     }
     .poster {
-      width: 100%;
-      display: block;
-      border-bottom: 1.5px solid #ff3c3c66;
-      height: 270px;
-      object-fit: cover;
-      flex-shrink: 0;
-      user-select: none;
-      touch-action: manipulation;
+      height: 240px;
     }
-    .movie-info, .series-info {
-      padding: 1rem 1.2rem 0.8rem;
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-    }
-    .movie-title, .series-title {
-      font-weight: 900;
-      font-size: 1.15rem;
-      margin: 0 0 0.4rem;
-      color: #ff5c5c;
-      user-select: text;
-    }
-    .movie-genre, .series-genre {
-      font-size: 0.85rem;
-      color: #bbb;
-      margin-bottom: 0.75rem;
-      font-style: italic;
-      user-select: text;
-    }
-    .movie-description, .series-description {
-      font-size: 0.85rem;
-      line-height: 1.3;
-      color: #ccc;
-      flex-grow: 1;
-      user-select: text;
-    }
-    .download-btn {
-      margin-top: 1rem;
-      background: #ff3c3c;
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      padding: 0.6rem 0;
+    #search {
+      max-width: 280px;
       font-size: 1rem;
-      font-weight: 800;
-      text-align: center;
-      cursor: pointer;
-      text-decoration: none;
-      user-select: none;
-      transition: background-color 0.3s ease, transform 0.15s ease;
+    }
+    .section-header {
+      font-size: 1.3rem;
+      margin-left: 0.4rem;
+    }
+  }
+  @media (max-width: 480px) {
+    body {
+      height: auto;
+    }
+    #sidebar {
+      position: fixed;
+      top: 60px;
+      left: 0;
+      height: calc(100vh - 60px);
+      width: 250px;
+      max-width: 80vw;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+      z-index: 2001;
+      padding: 1rem 1.5rem;
+      box-shadow: 2px 0 10px rgba(255,60,60,0.7);
+    }
+    #sidebar.show {
+      transform: translateX(0);
+    }
+    main {
+      margin-left: 0;
+      max-width: 100vw;
+      padding: 0.8rem 1rem 1.5rem;
+      height: calc(100vh - 60px);
+      overflow-y: auto;
+    }
+    #toggle-btn {
       display: block;
-      width: 100%;
-      box-shadow: 0 3px 8px #ff3c3ccc;
     }
-    .download-btn:hover,
-    .download-btn:focus {
-      background: #ff1a1a;
-      outline: none;
-      transform: scale(1.06);
-      box-shadow: 0 6px 18px #ff1a1aee;
+    #sidebar-close-btn {
+      display: block;
     }
-    .no-items-message {
-      color: #999;
-      text-align: center;
-      width: 100%;
-      user-select: none;
-      font-size: 1.1rem;
-      padding: 1rem 0;
-      font-style: italic;
+    .movie-card, .series-card {
+      flex: 0 0 140px;
     }
-    #error-message {
-      color: #ff4c4c;
-      text-align: center;
-      padding: 1.2rem;
-      font-weight: 700;
-      user-select: none;
-      font-size: 1.1rem;
+    .poster {
+      height: 210px;
+    }
+    .items-scroll-container {
+      gap: 0.8rem;
+      padding-left: 0.3rem;
+    }
+    .section-header {
+      font-size: 1.2rem;
+      margin-left: 0.3rem;
+    }
+    #search {
+      max-width: 90vw;
+      font-size: 1.05rem;
+      padding: 0.6rem 0.75rem;
     }
     footer {
-      text-align: center;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       padding: 0.75rem 1rem;
-      color: #555;
-      user-select: none;
-      background-color: #111;
-      flex-shrink: 0;
     }
-    /* Detailed view styles */
-    #detail-view {
-      max-width: 720px;
-      margin: 0 auto;
-      background: #222;
-      border-radius: 16px;
-      box-shadow: 0 8px 30px #ff3c3caa;
-      padding: 20px 24px;
-      color: #eee;
-      user-select: text;
-    }
-    #detail-view .detail-poster {
-      width: 100%;
-      max-height: 400px;
-      object-fit: contain;
-      border-radius: 12px;
-      margin-bottom: 16px;
-      user-select: none;
-    }
-    #detail-view h2 {
-      font-size: 2rem;
-      font-weight: 900;
-      margin: 0 0 12px;
-      color: #ff3c3c;
-    }
-    #detail-view .detail-genre {
-      font-size: 1.1rem;
-      font-style: italic;
-      color: #bbb;
-      margin-bottom: 20px;
-    }
-    #detail-view .detail-description {
-      font-size: 1.1rem;
-      line-height: 1.4;
-      margin-bottom: 24px;
-      color: #ddd;
-    }
-    #detail-view .detail-download-btn {
-      background: #ff3c3c;
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      padding: 14px 0;
-      font-size: 1.2rem;
-      font-weight: 900;
-      text-align: center;
-      cursor: pointer;
-      text-decoration: none;
-      user-select: none;
-      box-shadow: 0 6px 18px #ff3c3ccc;
-      display: inline-block;
-      width: 100%;
-      max-width: 320px;
-      transition: background-color 0.3s ease, transform 0.15s ease;
-    }
-    #detail-view .detail-download-btn:hover,
-    #detail-view .detail-download-btn:focus {
-      background: #ff1a1a;
-      outline: none;
-      transform: scale(1.05);
-      box-shadow: 0 8px 25px #ff1a1aee;
-    }
-    #detail-view .back-button {
-      margin-top: 24px;
-      background: transparent;
-      border: 2px solid #ff3c3c;
-      color: #ff3c3c;
-      font-size: 1.1rem;
-      font-weight: 700;
-      padding: 8px 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      user-select: none;
-      transition: background-color 0.3s ease, color 0.3s ease;
-      display: inline-block;
-      text-align: center;
-    }
-    #detail-view .back-button:hover,
-    #detail-view .back-button:focus {
-      background: #ff3c3c;
-      color: #fff;
-      outline: none;
-    }
-    /* Responsive adjustments */
-    @media (max-width: 900px) {
-      #sidebar {
-        width: 180px;
-        padding: 1rem 1rem;
-      }
-      main {
-        margin-left: 180px;
-        max-width: calc(100vw - 180px);
-        padding: 0.8rem 1rem 1.5rem;
-      }
-      .items-scroll-container {
-        gap: 1rem;
-        padding-left: 0.4rem;
-      }
-      .movie-card, .series-card {
-        flex: 0 0 160px;
-      }
-      .poster {
-        height: 240px;
-      }
-      #search {
-        max-width: 280px;
-        font-size: 1rem;
-      }
-      .section-header {
-        font-size: 1.3rem;
-        margin-left: 0.4rem;
-      }
-      #detail-view {
-        padding: 20px;
-      }
-    }
-    @media (max-width: 480px) {
-      body {
-        height: auto;
-      }
-      #sidebar {
-        position: fixed;
-        top: 60px;
-        left: 0;
-        height: calc(100vh - 60px);
-        width: 250px;
-        max-width: 80vw;
-        transform: translateX(-100%);
-        transition: transform 0.3s ease;
-        z-index: 2001;
-        padding: 1rem 1.5rem;
-        box-shadow: 2px 0 10px rgba(255,60,60,0.7);
-      }
-      #sidebar.show {
-        transform: translateX(0);
-      }
-      main {
-        margin-left: 0;
-        max-width: 100vw;
-        padding: 0.8rem 1rem 1.5rem;
-        height: calc(100vh - 60px);
-        overflow-y: auto;
-      }
-      #toggle-btn {
-        display: block;
-      }
-      #sidebar-close-btn {
-        display: block;
-      }
-      .movie-card, .series-card {
-        flex: 0 0 140px;
-      }
-      .poster {
-        height: 210px;
-      }
-      .items-scroll-container {
-        gap: 0.8rem;
-        padding-left: 0.3rem;
-      }
-      .section-header {
-        font-size: 1.2rem;
-        margin-left: 0.3rem;
-      }
-      #search {
-        max-width: 90vw;
-        font-size: 1.05rem;
-        padding: 0.6rem 0.75rem;
-      }
-      footer {
-        font-size: 0.8rem;
-        padding: 0.75rem 1rem;
-      }
-      #detail-view {
-        max-width: 90vw;
-        padding: 16px 16px 24px;
-      }
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
   <header>
@@ -596,67 +499,52 @@
       </div>
       <div id="error-message" role="alert" aria-live="assertive" style="display:none;"></div>
 
-      <!-- List view -->
-      <div id="list-view">
-        <div id="movies-content" style="display:none;">
-          <section aria-label="New Releases">
-            <h2 class="section-header" data-key="newReleases">New Releases</h2>
-            <div class="items-scroll-container" id="new-releases-container" tabindex="0" aria-live="polite" aria-relevant="additions removals"></div>
-          </section>
-          <section aria-label="Mostly Watched">
-            <h2 class="section-header" data-key="mostlyWatched">Mostly Watched</h2>
-            <div class="items-scroll-container no-scroll" id="mostly-watched-container" tabindex="0" aria-live="polite" aria-relevant="additions removals"></div>
-          </section>
-          <section aria-label="Classics">
-            <h2 class="section-header" data-key="classics">Classics</h2>
-            <div class="items-scroll-container no-scroll" id="classics-container" tabindex="0" aria-live="polite" aria-relevant="additions removals"></div>
-          </section>
-        </div>
-        <div id="series-content" style="display:none;">
-          <section aria-label="Popular Series">
-            <h2 class="section-header" data-key="popularSeries">Popular Series</h2>
-            <div class="items-scroll-container no-scroll" id="popular-series-container" tabindex="0" aria-live="polite" aria-relevant="additions removals"></div>
-          </section>
-          <section aria-label="New Series">
-            <h2 class="section-header" data-key="newSeries">New Series</h2>
-            <div class="items-scroll-container no-scroll" id="new-series-container" tabindex="0" aria-live="polite" aria-relevant="additions removals"></div>
-          </section>
-        </div>
+      <div id="movies-content">
+        <section aria-label="Movies">
+          <h2 class="section-header">Movies</h2>
+          <div class="items-scroll-container" id="movies-container" tabindex="0" aria-live="polite" aria-relevant="additions removals"></div>
+        </section>
       </div>
 
-      <!-- Detail view -->
-      <div id="detail-view" style="display:none;" tabindex="0" aria-live="polite" aria-label="Movie or series details"></div>
+      <div id="series-content" style="display:none;">
+        <section aria-label="Series">
+          <h2 class="section-header">Series</h2>
+          <div class="items-scroll-container" id="series-container" tabindex="0" aria-live="polite" aria-relevant="additions removals"></div>
+        </section>
+      </div>
     </main>
   </div>
 
   <footer>
-    &copy; M© 
+    &copy; M©
   </footer>
 
   <script>
+    const OMDB_API_KEY = '9b3b4fa1f1d85f3d1be4c5bb88a1b2c0'; // Replace with your OMDb API key
+
     const sidebar = document.getElementById('sidebar');
     const toggleBtn = document.getElementById('toggle-btn');
     const navMoviesBtn = document.getElementById('nav-movies');
     const navSeriesBtn = document.getElementById('nav-series');
+    const languageButtons = document.querySelectorAll('.language-btn');
     const searchInput = document.getElementById('search');
+    const moviesContainer = document.getElementById('movies-container');
+    const seriesContainer = document.getElementById('series-container');
+    const errorMessageEl = document.getElementById('error-message');
     const moviesContent = document.getElementById('movies-content');
     const seriesContent = document.getElementById('series-content');
-    const languageButtons = document.querySelectorAll('.language-btn');
-    const sectionHeaders = document.querySelectorAll('.section-header');
-    const errorMessageEl = document.getElementById('error-message');
-    const detailView = document.getElementById('detail-view');
-    const listView = document.getElementById('list-view');
-    const searchContainer = document.getElementById('search-container');
     const sidebarCloseBtn = document.getElementById('sidebar-close-btn');
+    const searchContainer = document.getElementById('search-container');
 
     let currentCategory = 'movies';
     let currentLanguage = 'all';
 
-    let moviesData = null;
-    let seriesData = null;
+    let moviesMinimal = [];
+    let seriesMinimal = [];
+    let moviesEnriched = [];
+    let seriesEnriched = [];
 
-    let containersMap = { movies: [], series: [] };
-
+    // Toggle sidebar for mobile
     toggleBtn.addEventListener('click', () => {
       sidebar.classList.toggle('show');
       toggleBtn.classList.toggle('active');
@@ -678,10 +566,11 @@
       }
     });
 
+    // Category switching
     function switchCategory(cat) {
       if (currentCategory === cat) return;
       currentCategory = cat;
-      hideDetailView();
+      searchInput.value = '';
       if (cat === 'movies') {
         moviesContent.style.display = '';
         seriesContent.style.display = 'none';
@@ -697,72 +586,107 @@
         navMoviesBtn.classList.remove('selected');
         navMoviesBtn.removeAttribute('aria-current');
       }
+      currentLanguage = 'all';
+      languageButtons.forEach(btn => btn.classList.toggle('selected', btn.dataset.lang === 'all'));
+      errorMessageEl.style.display = 'none';
       searchContainer.style.display = '';
-      searchInput.value = '';
-      updateSearchPlaceholder();
-      renderAllSections();
+      searchInput.placeholder = currentCategory === 'movies' ? 'Search movies...' : 'Search series...';
+      renderAll();
     }
     navMoviesBtn.addEventListener('click', () => switchCategory('movies'));
     navSeriesBtn.addEventListener('click', () => switchCategory('series'));
 
+    // Language selection
     function setLanguage(lang) {
       currentLanguage = lang;
       languageButtons.forEach(btn => {
         btn.classList.toggle('selected', btn.dataset.lang === lang);
       });
-      if(currentDetailItem) {
-        renderDetail(currentDetailItem, currentDetailIsSeries);
-      }
-      renderAllSections();
+      renderAll();
     }
-    languageButtons.forEach(btn => {
-      btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
-    });
+    languageButtons.forEach(btn => btn.addEventListener('click', () => setLanguage(btn.dataset.lang)));
 
-    const translations = {
-      en: {
-        navMovies: "Movies",
-        navSeries: "Series",
-        searchPlaceholder: "Search movies...",
-        downloadLabel: "Download",
-        backButton: "Back",
-        noItemsMessage: "No items found.",
-        sections: {
-          newReleases: "New Releases",
-          mostlyWatched: "Mostly Watched",
-          classics: "Classics",
-          popularSeries: "Popular Series",
-          newSeries: "New Series"
-        }
+    // Fetch movie or series details from OMDb API by title
+    async function fetchItemDetails(title, type = 'movie') {
+      // type param optional for future extension (movie or series)
+      const url = `https://www.omdbapi.com/?apikey=${OMDB_API_KEY}&t=${encodeURIComponent(title)}&type=${type}&plot=short`;
+      try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+        const data = await response.json();
+        if (data.Response === "False") throw new Error(`Not found: ${title}`);
+        return {
+          title: data.Title || title,
+          genre: data.Genre || 'Unknown',
+          description: data.Plot || 'No description available.',
+          poster: (data.Poster && data.Poster !== 'N/A') ? data.Poster : 'https://via.placeholder.com/180x270?text=No+Image',
+        };
+      } catch (error) {
+        console.warn('Fetch failed for', title, error);
+        return {
+          title,
+          genre: 'Unknown',
+          description: 'No description available.',
+          poster: 'https://via.placeholder.com/180x270?text=No+Image',
+        };
       }
-    };
-
-    function updateUIStrings() {
-      let t = translations[currentLanguage] || translations.en;
-      searchInput.placeholder = currentCategory === 'movies'
-        ? t.searchPlaceholder.replace('movies', t.navMovies.toLowerCase())
-        : t.searchPlaceholder.replace('movies', t.navSeries.toLowerCase());
-      navMoviesBtn.textContent = t.navMovies;
-      navSeriesBtn.textContent = t.navSeries;
-      sectionHeaders.forEach(header => {
-        const key = header.dataset.key;
-        if (t.sections[key]) header.textContent = t.sections[key];
-      });
-      document.querySelectorAll('.download-btn').forEach(btn => {
-        btn.textContent = t.downloadLabel;
-        const ariaLabel = btn.getAttribute('aria-label');
-        if (ariaLabel) {
-          const itemTitle = ariaLabel.replace(/^(Download|Descargar|Télécharger)\s*/, '');
-          btn.setAttribute('aria-label', `${t.downloadLabel} ${itemTitle}`);
-        }
-      });
     }
 
+    // Load minimal JSON data from 'movies-data.json'
+    async function loadDataMinimal() {
+      try {
+        const response = await fetch('movies-data.json', { cache: "no-store" });
+        if (!response.ok) throw new Error(`Failed to load movies-data.json: ${response.statusText}`);
+        const json = await response.json();
+        moviesMinimal = json.movies || [];
+        seriesMinimal = json.series || [];
+        errorMessageEl.style.display = 'none';
+      } catch (err) {
+        console.error(err);
+        errorMessageEl.textContent = 'Failed to load data. Please try again later.';
+        errorMessageEl.style.display = 'block';
+      }
+    }
+
+    // Enrich items array (movies or series)
+    async function enrichItems(minimalArray, type = 'movie') {
+      const enriched = [];
+      for (const item of minimalArray) {
+        const details = await fetchItemDetails(item.title, type);
+        enriched.push({
+          title: details.title,
+          genre: details.genre,
+          description: details.description,
+          poster: details.poster,
+          downloadUrl: item.downloadUrl,
+          language: (item.language || 'all').toLowerCase()
+        });
+      }
+      return enriched;
+    }
+
+    // Filter items by query and language
+    function filterItems(items, query, lang) {
+      let filtered = items;
+      if (query) {
+        const q = query.toLowerCase();
+        filtered = filtered.filter(item =>
+          item.title.toLowerCase().includes(q) ||
+          item.genre.toLowerCase().includes(q) ||
+          item.description.toLowerCase().includes(q)
+        );
+      }
+      if (lang && lang !== 'all') {
+        filtered = filtered.filter(item => item.language === lang);
+      }
+      return filtered;
+    }
+
+    // Display items in the container
     function displayItems(items, container, isSeries = false) {
       container.innerHTML = '';
-      if (!items.length) {
-        const noMsg = translations[currentLanguage]?.noItemsMessage || 'No items found.';
-        container.innerHTML = `<p class="no-items-message">${noMsg}</p>`;
+      if (items.length === 0) {
+        container.innerHTML = '<p class="no-items-message">No items found.</p>';
         return;
       }
       items.forEach(item => {
@@ -775,164 +699,40 @@
             <h3 class="${isSeries ? 'series-title' : 'movie-title'}">${item.title}</h3>
             <div class="${isSeries ? 'series-genre' : 'movie-genre'}">${item.genre}</div>
             <p class="${isSeries ? 'series-description' : 'movie-description'}">${item.description}</p>
+            <a href="${item.downloadUrl}" class="download-btn" download="${item.title.replace(/\s+/g, '_').toLowerCase()}.mp4" aria-label="Download ${item.title}">Download</a>
           </div>
         `;
-        card.onclick = () => {
-          showDetailView(item, isSeries);
-          if (window.innerWidth <= 480) {
-            sidebar.classList.remove('show');
-            toggleBtn.classList.remove('active');
-            toggleBtn.setAttribute('aria-expanded', 'false');
-          }
-        };
         container.appendChild(card);
       });
     }
 
-    function filterItemsByQuery(itemsArray, query) {
-      if (!query) return itemsArray;
-      query = query.toLowerCase();
-      return itemsArray.filter(item =>
-        item.title.toLowerCase().includes(query) ||
-        item.genre.toLowerCase().includes(query) ||
-        item.description.toLowerCase().includes(query)
-      );
-    }
-
-    function filterItemsByLanguage(itemsArray, language) {
-      if (!language || language === 'all') return itemsArray;
-      return itemsArray.filter(item => {
-        if (!item.language) return false;
-        return item.language.toLowerCase() === language.toLowerCase();
-      });
-    }
-
-    function startAutoScroll(containerEl) {
-      if (!containerEl) return;
-      let direction = 1;
-      let scrollSpeed = 0.75;
-      if (containerEl._scrollInterval) clearInterval(containerEl._scrollInterval);
-      containerEl._scrollInterval = setInterval(() => {
-        containerEl.scrollLeft += scrollSpeed * direction;
-        if (containerEl.scrollLeft + containerEl.clientWidth >= containerEl.scrollWidth - 1) direction = -1;
-        else if (containerEl.scrollLeft <= 0) direction = 1;
-      }, 16);
-      containerEl.addEventListener('mouseenter', () => clearInterval(containerEl._scrollInterval));
-      containerEl.addEventListener('mouseleave', () => startAutoScroll(containerEl));
-      containerEl.addEventListener('focusin', () => clearInterval(containerEl._scrollInterval));
-      containerEl.addEventListener('focusout', () => startAutoScroll(containerEl));
-    }
-
-    let currentDetailItem = null;
-    let currentDetailIsSeries = false;
-
-    function showDetailView(item, isSeries) {
-      currentDetailItem = item;
-      currentDetailIsSeries = isSeries;
-      listView.style.display = 'none';
-      searchContainer.style.display = 'none';
-      errorMessageEl.style.display = 'none';
-      detailView.style.display = 'block';
-      renderDetail(item, isSeries);
-      detailView.focus();
-      clearInterval(document.getElementById('new-releases-container')._scrollInterval);
-    }
-
-    function hideDetailView() {
-      currentDetailItem = null;
-      currentDetailIsSeries = false;
-      detailView.style.display = 'none';
-      listView.style.display = '';
-      searchContainer.style.display = '';
-      startAutoScroll(document.getElementById('new-releases-container'));
-    }
-
-    function renderDetail(item, isSeries) {
-      const t = translations[currentLanguage] || translations.en;
-      detailView.innerHTML = `
-        <img src="${item.poster}" alt="${isSeries ? 'Poster of series ' : 'Poster of movie '}${item.title}" class="detail-poster" />
-        <h2>${item.title}</h2>
-        <div class="detail-genre">${item.genre}</div>
-        <div class="detail-description">${item.description}</div>
-        <a href="${item.downloadUrl}" class="detail-download-btn" download="${item.title.replace(/\s+/g, '_').toLowerCase()}.mp4" aria-label="${t.downloadLabel} ${item.title}">${t.downloadLabel}</a>
-        <button class="back-button" aria-label="${t.backButton}">${t.backButton}</button>
-      `;
-      detailView.querySelector('.back-button').addEventListener('click', () => {
-        hideDetailView();
-      });
-    }
-
-    function renderAllSections() {
-      if (!moviesData || !seriesData) return;
-      const query = searchInput.value.trim().toLowerCase();
+    // Render all items based on current category, language and search query
+    function renderAll() {
+      const query = searchInput.value.trim();
       if (currentCategory === 'movies') {
         moviesContent.style.display = '';
         seriesContent.style.display = 'none';
-        const conts = containersMap.movies;
-        conts.forEach(c => {
-          let filtered = filterItemsByQuery(c.data, query);
-          filtered = filterItemsByLanguage(filtered, currentLanguage);
-          displayItems(filtered, c.el, false);
-          if (c.key === 'newReleases') {
-            startAutoScroll(c.el);
-          } else {
-            clearInterval(c.el._scrollInterval);
-          }
-        });
+        const filteredMovies = filterItems(moviesEnriched, query, currentLanguage);
+        displayItems(filteredMovies, moviesContainer);
       } else {
         moviesContent.style.display = 'none';
         seriesContent.style.display = '';
-        const conts = containersMap.series;
-        conts.forEach(c => {
-          let filtered = filterItemsByQuery(c.data, query);
-          displayItems(filtered, c.el, true);
-          clearInterval(c.el._scrollInterval);
-        });
+        const filteredSeries = filterItems(seriesEnriched, query, currentLanguage);
+        displayItems(filteredSeries, seriesContainer, true);
       }
     }
 
-    function updateSearchPlaceholder() {
-      const basePlaceholder = translations[currentLanguage]?.searchPlaceholder || "Search movies...";
-      searchInput.placeholder = currentCategory === 'movies'
-        ? basePlaceholder.replace('movies', translations[currentLanguage]?.navMovies.toLowerCase() || "movies")
-        : basePlaceholder.replace('movies', translations[currentLanguage]?.navSeries.toLowerCase() || "series");
+    searchInput.addEventListener('input', renderAll);
+
+    // Initialize app: load minimal data, enrich, and render default category
+    async function init() {
+      await loadDataMinimal();
+      moviesEnriched = await enrichItems(moviesMinimal, 'movie');
+      seriesEnriched = await enrichItems(seriesMinimal, 'series');
+      renderAll();
     }
 
-    async function loadDataAndInit() {
-      try {
-        // Make sure to serve movies-data.json from the same directory or correct path
-        const response = await fetch('movies-data.json', { cache: "no-store" });
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-        const data = await response.json();
-        moviesData = data.movies;
-        seriesData = data.series;
-        containersMap = {
-          movies: [
-            { key: 'newReleases', el: document.getElementById('new-releases-container'), data: moviesData.newReleases || [] },
-            { key: 'mostlyWatched', el: document.getElementById('mostly-watched-container'), data: moviesData.mostlyWatched || [] },
-            { key: 'classics', el: document.getElementById('classics-container'), data: moviesData.classics || [] }
-          ],
-          series: [
-            { key: 'popularSeries', el: document.getElementById('popular-series-container'), data: seriesData.popularSeries || [] },
-            { key: 'newSeries', el: document.getElementById('new-series-container'), data: seriesData.newSeries || [] }
-          ]
-        };
-        errorMessageEl.style.display = 'none';
-        moviesContent.style.display = 'block';
-        searchContainer.style.display = '';
-        updateUIStrings();
-        updateSearchPlaceholder();
-        renderAllSections();
-      } catch (error) {
-        console.error('Failed to load movie data JSON:', error);
-        errorMessageEl.textContent = 'Failed to load movie data. Please try again later.';
-        errorMessageEl.style.display = 'block';
-      }
-    }
-
-    searchInput.addEventListener('input', renderAllSections);
-
-    loadDataAndInit();
+    init();
   </script>
 </body>
 </html>
