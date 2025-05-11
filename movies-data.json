@@ -1,6 +1,79 @@
 {
   "movies": [
-    { "title": "Inception", "downloadUrl": "https://example.com/inception.mp4" },
-    { "title": "The Matrix", "downloadUrl": "https://example.com/matrix.mp4" }
+    {
+      "title": "Inception",
+      "downloadUrl": "https://example.com/inception.mp4",
+      "language": "english",
+      "category": "newReleases"
+    },
+    {
+      "title": "Inception",
+      "downloadUrl": "https://example.com/inception.mp4",
+      "language": "english",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "The Matrix",
+      "downloadUrl": "https://example.com/matrix.mp4",
+      "language": "english",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Jai Bhim",
+      "downloadUrl": "https://example.com/jaibhim.mp4",
+      "language": "tamil",
+      "category": "newReleases"
+    },
+    {
+      "title": "3 Idiots",
+      "downloadUrl": "https://example.com/3idiots.mp4",
+      "language": "hindi",
+      "category": "all"
+    },
+    {
+      "title": "Ee Ma Yau",
+      "downloadUrl": "https://example.com/eemayau.mp4",
+      "language": "malayalam",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Bahubali: The Beginning",
+      "downloadUrl": "https://example.com/bahubali1.mp4",
+      "language": "telugu",
+      "category": "trending"
+    },
+    {
+      "title": "Bahubali: The Conclusion",
+      "downloadUrl": "https://example.com/bahubali2.mp4",
+      "language": "tamil",
+      "category": "newReleases"
+    },
+    {
+      "title": "Dilwale Dulhania Le Jayenge",
+      "downloadUrl": "https://example.com/dilwale.mp4",
+      "language": "hindi",
+      "category": "mostlyWatched"
+    }
+  ],
+  
+  "series": [
+    {
+      "title": "Stranger Things",
+      "downloadUrl": "https://example.com/strangerthings.mp4",
+      "language": "english",
+      "category": "newReleases"
+    },
+    {
+      "title": "The Crown",
+      "downloadUrl": "https://example.com/thecrown.mp4",
+      "language": "english",
+      "category": "mostlyWatched"
+    },
+    {
+      "title": "Money Heist",
+      "downloadUrl": "https://example.com/moneyheist.mp4",
+      "language": "spanish",
+      "category": "trending"
+    }
   ]
 }
