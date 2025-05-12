@@ -624,21 +624,13 @@
       <div id="error-message" role="alert" aria-live="assertive" style="display:none;"></div>
 
       <div id="list-view">
-        <!-- Movie category tabs -->
-        <div id="movie-category-tabs" aria-label="Movie categories">
-          <button type="button" class="movie-category-btn selected" data-category="newReleases">New Released</button>
-          <button type="button" class="movie-category-btn" data-category="mostlyWatched">Mostly Watched</button>
-          <button type="button" class="movie-category-btn" data-category="trending">Trending</button>
-          <button type="button" class="movie-category-btn" data-category="all">All Movies</button>
-        </div>
-
         <section aria-label="Movies">
-          <h2 class="section-header" id="current-category-title">New Released</h2>
+          <h2 class="section-header" id="current-category-title">Movies</h2>
           <div class="items-scroll-container" id="movies-container" tabindex="0" aria-live="polite" aria-relevant="additions removals"></div>
         </section>
 
         <section aria-label="Series" style="margin-top: 2rem;">
-          <h2 class="section-header" id="series-category-title">All Series</h2>
+          <h2 class="section-header" id="series-category-title">Series</h2>
           <div class="items-scroll-container" id="series-container" tabindex="0" aria-live="polite" aria-relevant="additions removals"></div>
         </section>
       </div>
@@ -660,9 +652,6 @@
   const sidebarCloseBtn = document.getElementById('sidebar-close-btn');
   const navMoviesBtn = document.getElementById('nav-movies');
   const navSeriesBtn = document.getElementById('nav-series');
-  const movieCategoryTabs = Array.from(document.querySelectorAll('#movie-category-tabs button'));
-  const currentCategoryTitle = document.getElementById('current-category-title');
-  const seriesCategoryTitle = document.getElementById('series-category-title');
   const moviesContainer = document.getElementById('movies-container');
   const seriesContainer = document.getElementById('series-container');
   const searchInput = document.getElementById('search');
@@ -671,7 +660,6 @@
   const languageButtons = Array.from(document.querySelectorAll('.language-btn'));
 
   let currentNav = 'movies'; // 'movies' or 'series'
-  let currentMovieCategory = 'newReleases';
   let currentLanguage = 'all';
   let moviesMinimal = [];
   let seriesMinimal = [];
@@ -710,14 +698,6 @@
       navMoviesBtn.setAttribute('aria-current', 'page');
       navSeriesBtn.classList.remove('selected');
       navSeriesBtn.removeAttribute('aria-current');
-      movieCategoryTabs.forEach(btn => btn.style.display = 'inline-block');
-      currentCategoryTitle.style.display = 'block';
-      moviesContainer.parentElement.style.display = 'block';
-      seriesContainer.parentElement.style.display = 'none';
-      seriesCategoryTitle.style.display = 'none';
-      currentMovieCategory = 'newReleases';
-      movieCategoryTabs.forEach(btn => btn.classList.toggle('selected', btn.dataset.category === currentMovieCategory));
-      currentCategoryTitle.textContent = getCategoryTitle(currentMovieCategory);
       filterAndRender();
       closeSidebarOnMobile();
     }
@@ -730,26 +710,9 @@
       navSeriesBtn.setAttribute('aria-current', 'page');
       navMoviesBtn.classList.remove('selected');
       navMoviesBtn.removeAttribute('aria-current');
-      movieCategoryTabs.forEach(btn => btn.style.display = 'none');
-      currentCategoryTitle.style.display = 'none';
-      moviesContainer.parentElement.style.display = 'none';
-      seriesContainer.parentElement.style.display = 'flex';
-      seriesCategoryTitle.style.display = 'block';
       filterAndRender();
       closeSidebarOnMobile();
     }
-  });
-
-  // Movie category tabs click
-  movieCategoryTabs.forEach(btn => {
-    btn.addEventListener('click', () => {
-      if (btn.dataset.category !== currentMovieCategory) {
-        currentMovieCategory = btn.dataset.category;
-        movieCategoryTabs.forEach(b => b.classList.toggle('selected', b === btn));
-        currentCategoryTitle.textContent = getCategoryTitle(currentMovieCategory);
-        filterAndRender();
-      }
-    });
   });
 
   // Language selection
@@ -779,18 +742,7 @@
     }
   }
 
-  // Get category title text
-  function getCategoryTitle(category) {
-    switch(category) {
-      case 'newReleases': return 'New Released';
-      case 'mostlyWatched': return 'Mostly Watched';
-      case 'trending': return 'Trending';
-      case 'all': return 'All Movies';
-      default: return 'Movies';
-    }
-  }
-
-  // Fetch movie or series details from OMDb API
+  // Fetch movie or series details from OMDb API by title
   async function fetchMovieDetails(title) {
     try {
       const url = `https://www.omdbapi.com/?apikey=${OMDB_API_KEY}&t=${encodeURIComponent(title)}&plot=short`;
@@ -822,65 +774,26 @@
     }
   }
 
-  // Load minimal data from JSON
-  async function loadMinimalData() {
-    try {
-      const response = await fetch('movies-data.json', { cache: "no-store" });
-      if (!response.ok) throw new Error(`Failed to load movies-data.json: ${response.statusText}`);
-      const data = await response.json();
-      moviesMinimal = data.movies || [];
-      seriesMinimal = data.series || [];
-      errorMessageEl.style.display = 'none';
-    } catch (err) {
-      console.error(err);
-      errorMessageEl.textContent = 'Failed to load movie data. Please try again later.';
-      errorMessageEl.style.display = 'block';
-    }
-  }
-
-  // Enrich movies and series by fetching details for each title
-  async function enrichData() {
-    const enrichedMovies = [];
-    for (const movie of moviesMinimal) {
-      const details = await fetchMovieDetails(movie.title);
-      enrichedMovies.push({
+  // Enrich items with full details from OMDb API
+  async function enrichItems(minimalItems) {
+    const enriched = [];
+    for (const item of minimalItems) {
+      const details = await fetchMovieDetails(item.title);
+      enriched.push({
         title: details.title,
         genre: details.genre,
         description: details.description,
         poster: details.poster,
-        downloadUrl: movie.downloadUrl,
-        language: (movie.language || 'all').toLowerCase(),
-        category: (movie.category || 'all')
+        downloadUrl: item.downloadUrl || '#',
+        language: (item.language || 'all').toLowerCase()
       });
     }
-    moviesEnriched = enrichedMovies;
-
-    const enrichedSeries = [];
-    for (const series of seriesMinimal) {
-      const details = await fetchMovieDetails(series.title);
-      enrichedSeries.push({
-        title: details.title,
-        genre: details.genre,
-        description: details.description,
-        poster: details.poster,
-        downloadUrl: series.downloadUrl,
-        language: (series.language || 'all').toLowerCase(),
-        category: (series.category || 'all')
-      });
-    }
-    seriesEnriched = enrichedSeries;
+    return enriched;
   }
 
-  // Filter movies or series by category, language and search query
-  function filterData(type, category, lang, query) {
-    let filtered = [];
-    if (type === 'movies') {
-      filtered = moviesEnriched;
-      if (category && category !== 'all') filtered = filtered.filter(m => m.category === category);
-    } else {
-      filtered = seriesEnriched;
-      // For series, no category tabs, so no category filtering needed
-    }
+  // Filter items by language and search query
+  function filterItems(items, lang, query) {
+    let filtered = items;
     if (lang && lang !== 'all') filtered = filtered.filter(m => m.language === lang);
     if (query) {
       const q = query.toLowerCase();
@@ -986,7 +899,7 @@
   function filterAndRender() {
     const query = searchInput.value.trim();
     if (currentNav === 'movies') {
-      const filteredMovies = filterData('movies', currentMovieCategory, currentLanguage, query);
+      const filteredMovies = filterItems(moviesEnriched, currentLanguage, query);
       displayMovieList(filteredMovies);
       seriesContainer.innerHTML = '';
       seriesContainer.parentElement.style.display = 'none';
@@ -994,7 +907,7 @@
       moviesContainer.parentElement.style.display = 'block';
       seriesCategoryTitle.style.display = 'none';
     } else {
-      const filteredSeries = filterData('series', null, currentLanguage, query);
+      const filteredSeries = filterItems(seriesEnriched, currentLanguage, query);
       displaySeriesList(filteredSeries);
       moviesContainer.innerHTML = '';
       moviesContainer.parentElement.style.display = 'none';
@@ -1004,11 +917,27 @@
     }
   }
 
-  // Initialize app
+  // Initialize app: load minimal data from JSON, enrich, then render
   async function init() {
-    await loadMinimalData();
-    await enrichData();
-    filterAndRender();
+    errorMessageEl.style.display = 'none';
+    try {
+      // Load minimal data (only title and downloadUrl) from JSON file
+      const response = await fetch('movies-downloads.json', {cache: "no-store"});
+      if (!response.ok) throw new Error(`Failed to load movies-downloads.json: ${response.statusText}`);
+      const data = await response.json();
+      moviesMinimal = data.movies || [];
+      seriesMinimal = data.series || [];
+
+      // Enrich movies and series with full details from OMDb API
+      moviesEnriched = await enrichItems(moviesMinimal);
+      seriesEnriched = await enrichItems(seriesMinimal);
+
+      filterAndRender();
+    } catch (err) {
+      console.error(err);
+      errorMessageEl.textContent = 'Failed to load movie data. Please try again later.';
+      errorMessageEl.style.display = 'block';
+    }
   }
 
   init();
