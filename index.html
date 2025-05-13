@@ -658,8 +658,10 @@
   const errorMessageEl = document.getElementById('error-message');
   const detailView = document.getElementById('detail-view');
   const languageButtons = Array.from(document.querySelectorAll('.language-btn'));
+  const currentCategoryTitle = document.getElementById('current-category-title');
+  const seriesCategoryTitle = document.getElementById('series-category-title');
 
-  let currentNav = 'movies'; // 'movies' or 'series'
+  let currentNav = 'series'; // default active section is series as requested
   let currentLanguage = 'all';
   let moviesMinimal = [];
   let seriesMinimal = [];
@@ -755,13 +757,27 @@
           genre: "Unknown",
           description: "No description available.",
           poster: "https://placehold.co/300x450/png?text=No+Image+Available",
+          language: "unknown"
         };
+      }
+      // Determine language from data.Language field (comma separated)
+      let lang = "unknown";
+      if (data.Language) {
+        // Normalize language to lowercase and check for known languages
+        const langs = data.Language.toLowerCase().split(',').map(s => s.trim());
+        if (langs.includes('english')) lang = 'english';
+        else if (langs.includes('malayalam')) lang = 'malayalam';
+        else if (langs.includes('tamil')) lang = 'tamil';
+        else if (langs.includes('hindi')) lang = 'hindi';
+        else if (langs.includes('telugu')) lang = 'telugu';
+        else lang = langs[0] || 'unknown';
       }
       return {
         title: data.Title || title,
         genre: data.Genre || "Unknown",
         description: data.Plot && data.Plot !== "N/A" ? data.Plot : "No description available.",
         poster: (data.Poster && data.Poster !== "N/A") ? data.Poster : "https://placehold.co/300x450/png?text=No+Image+Available",
+        language: lang
       };
     } catch (error) {
       console.error(error);
@@ -770,6 +786,7 @@
         genre: "Unknown",
         description: "No description available.",
         poster: "https://placehold.co/300x450/png?text=No+Image+Available",
+        language: "unknown"
       };
     }
   }
@@ -785,7 +802,7 @@
         description: details.description,
         poster: details.poster,
         downloadUrl: item.downloadUrl || '#',
-        language: (item.language || 'all').toLowerCase()
+        language: details.language || 'unknown'
       });
     }
     return enriched;
@@ -931,6 +948,13 @@
       // Enrich movies and series with full details from OMDb API
       moviesEnriched = await enrichItems(moviesMinimal);
       seriesEnriched = await enrichItems(seriesMinimal);
+
+      // Set default active nav to series as requested
+      currentNav = 'series';
+      navSeriesBtn.classList.add('selected');
+      navSeriesBtn.setAttribute('aria-current', 'page');
+      navMoviesBtn.classList.remove('selected');
+      navMoviesBtn.removeAttribute('aria-current');
 
       filterAndRender();
     } catch (err) {
